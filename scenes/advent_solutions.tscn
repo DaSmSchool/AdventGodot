@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://wxuoee08fu86"]
+
+[ext_resource type="Script" path="res://src/Day1.gd" id="1_vy5lq"]
+
+[node name="AdventSolutions" type="Node"]
+
+[node name="2020" type="Node" parent="."]
+
+[node name="Day1" type="Node" parent="2020"]
+script = ExtResource("1_vy5lq")
