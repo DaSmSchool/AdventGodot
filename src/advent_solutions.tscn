@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://wxuoee08fu86"]
-
-[node name="AdventSolutions" type="Node"]
-
-[node name="2020" type="Node" parent="."]

@@ -13,3 +13,7 @@ config_version=5
 config/name="Advent Gd 2024"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://src/global.gd"
