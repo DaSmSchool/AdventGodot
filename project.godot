@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="Advent Gd 2024"
+run/main_scene="res://scenes/advent_solutions.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://src/global.gd"
+Global="*res://src/helper.gd"
