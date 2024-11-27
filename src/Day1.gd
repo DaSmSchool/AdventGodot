@@ -9,20 +9,35 @@ func _ready():
 func _process(delta):
 	pass
 
-func solve(input: String) -> int:
+func solve1(input: String) -> int:
 	var solution: int = 0
 	var splitInput: PackedStringArray = input.split("\n")
-	var num1: String
-	var num2: String
 	
 	for line1 in splitInput:
+		var n1 = line1.to_int()
 		for line2 in splitInput:
-			if line1.hash() == line2.hash():
-				if line1.to_int() == 1010:
-					num1 = line1
-					num2 = line2
-					break
+			var n2 = line2.to_int()
+			if n1 == n2:
+				if n1 == 1010:
+					return n1*n1
 				continue
 			
+			if n1 + n2 == 2020:
+				return n1*n2
+	
+	return solution
+
+func solve2(input: String) -> int:
+	var solution: int = 0
+	var splitInput: PackedStringArray = input.split("\n")
+	
+	for line1 in splitInput:
+		var n1 = line1.to_int()
+		for line2 in splitInput:
+			var n2 = line2.to_int()
+			for line3 in splitInput:
+				var n3 = line3.to_int()
+				if n1 + n2 + n3 == 2020:
+					return n1*n2*n3
 	
 	return solution

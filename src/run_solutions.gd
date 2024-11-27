@@ -8,4 +8,5 @@ func _ready():
 
 func run_solution(year: int, day: int) -> void:
 	var adventInput = Helper.load_advent_input(year, day)
-	print(get_node("%d" % focusYear).get_node("Day%d" % focusDay).solve(adventInput))
+	print(get_node("%d" % focusYear).get_node("Day%d" % focusDay).solve1(adventInput))
+	print(get_node("%d" % focusYear).get_node("Day%d" % focusDay).solve2(adventInput))
