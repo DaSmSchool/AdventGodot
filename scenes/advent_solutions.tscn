@@ -9,6 +9,7 @@
 
 [node name="AdventSolutions" type="Node"]
 script = ExtResource("1_2trj4")
+focusDay = 5
 
 [node name="2020" type="Node" parent="."]
 
