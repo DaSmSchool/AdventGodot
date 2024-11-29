@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://wxuoee08fu86"]
+[gd_scene load_steps=9 format=3 uid="uid://wxuoee08fu86"]
 
 [ext_resource type="Script" path="res://src/run_solutions.gd" id="1_2trj4"]
 [ext_resource type="Script" path="res://src/2020Day1.gd" id="1_vy5lq"]
@@ -7,10 +7,11 @@
 [ext_resource type="Script" path="res://src/2020Day4.gd" id="5_1ybfd"]
 [ext_resource type="Script" path="res://src/2020Day5.gd" id="6_rmmd0"]
 [ext_resource type="Script" path="res://src/2020Day6.gd" id="7_7ka16"]
+[ext_resource type="Script" path="res://src/2020Day7.gd" id="8_f8dfc"]
 
 [node name="AdventSolutions" type="Node"]
 script = ExtResource("1_2trj4")
-focusDay = 6
+focusDay = 7
 
 [node name="2020" type="Node" parent="."]
 
@@ -31,3 +32,6 @@ script = ExtResource("6_rmmd0")
 
 [node name="Day6" type="Node" parent="2020"]
 script = ExtResource("7_7ka16")
+
+[node name="Day7" type="Node" parent="2020"]
+script = ExtResource("8_f8dfc")
