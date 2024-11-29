@@ -36,4 +36,20 @@ func solve1(input: String) -> int:
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
+	var inputLines: PackedStringArray = input.split("\n")
+	
+	for line: String in inputLines:
+		if line == "": continue
+		var inputSet: PackedStringArray = line.split(" ")
+		var policySet: PackedStringArray = inputSet[0].split("-")
+		var ind1: int = policySet[0].to_int() - 1
+		var ind2: int = policySet[1].to_int() - 1
+		var selectedChar: String = inputSet[1][0]
+		var possiblePassword: String = inputSet[2]
+		
+		var charAtInd1: int = int(possiblePassword[ind1] == selectedChar)
+		var charAtInd2: int = int(possiblePassword[ind2] == selectedChar)
+		
+		if charAtInd1 ^ charAtInd2: solution += 1
+		
 	return solution
