@@ -1,7 +1,7 @@
 extends Node
 
-var focusYear: int = 2020
-var focusDay: int = 2
+@export var focusYear: int = 2020
+@export var focusDay: int = 4
 
 func _ready():
 	run_solution(focusYear, focusDay)
