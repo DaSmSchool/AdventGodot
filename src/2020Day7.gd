@@ -86,7 +86,7 @@ func solve1(input: String) -> int:
 		
 	for key: String in checkedBagsCache.keys():
 		if checkedBagsCache[key] > 0: solution += 1
-		print(checkedBagsCache[key])
+		#print(checkedBagsCache[key])
 	
 	return solution
 
@@ -129,8 +129,5 @@ func solve2(input: String) -> int:
 	var bagCountCache: Dictionary = {}
 	
 	solution = recursiveCheckBagCount("shiny gold", containRules, bagCountCache, 0)
-		
-	for key: String in bagCountCache.keys():
-		print(bagCountCache[key])
 	
 	return solution
