@@ -18,3 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://src/helper.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
