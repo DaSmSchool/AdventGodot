@@ -135,8 +135,8 @@ func solve2(input: String) -> int:
 				shipY2 += wayOffY
 		else:
 			move_dir2(instruction[0], instruction[1])
-		print("WP: (" + str(waypointX) + ", " + str(waypointY) + ")")
-		print("SHIP: (" + str(shipX2) + ", " + str(shipY2) + ")")
+		#print("WP: (" + str(waypointX) + ", " + str(waypointY) + ")")
+		#print("SHIP: (" + str(shipX2) + ", " + str(shipY2) + ")")
 	
 	solution = abs(shipX2) + abs(shipY2)
 	
