@@ -28,22 +28,29 @@ func solve1(input: String) -> int:
 		reports.append(report)
 	
 	for report: Array[int] in reports:
-		var direction: int = sign(report[0]-report[1])
-		if direction == 0: continue
-		var safeReport: bool = true
-		for valInd: int in report.size()-1:
-			var currDiff: int = report[valInd]-report[valInd+1]
-			if abs(currDiff)>0 and abs(currDiff)<=3 and sign(currDiff) == direction:
-				pass
-			else:
-				safeReport = false
-				break
-		if safeReport:
+		var reportCheckResult: bool = checkReport(report)
+		if reportCheckResult:
 			safeReports += 1
 	
 	solution = safeReports
 	
 	return solution
+
+func checkReport(report: Array[int]) -> bool:
+	var direction: int = sign(report[0]-report[1])
+	if direction == 0: return false
+	var safeReport: bool = true
+	var badCount: int = 0
+	for valInd: int in report.size()-1:
+		var currDiff: int = report[valInd]-report[valInd+1]
+		if abs(currDiff)>0 and abs(currDiff)<=3 and sign(currDiff) == direction:
+			pass
+		else:
+			return false
+	if safeReport:
+		return true
+	else:
+		return false
 
 
 func solve2(input: String) -> int:
@@ -63,24 +70,25 @@ func solve2(input: String) -> int:
 		reports.append(report)
 	
 	for report: Array[int] in reports:
-		var direction: int = sign(report[0]-report[1])
-		if direction == 0: continue
-		var safeReport: bool = true
-		var badCount: int = 0
-		for valInd: int in report.size()-1:
-			var currDiff: int = report[valInd]-report[valInd+1]
-			if abs(currDiff)>0 and abs(currDiff)<=3 and sign(currDiff) == direction:
-				pass
-			else:
-				if valInd < report.size()-2:
-					currDiff = report[valInd]-report[valInd+2]
-					if abs(currDiff)>0 and abs(currDiff)<=3 and sign(currDiff) == direction:
-						pass
-					else:
-						safeReport = false
-						break
-		if safeReport:
+		var reportCheckResult: bool = checkReport(report)
+		if reportCheckResult:
 			safeReports += 1
+		else:
+			var goodCount: int = 0
+			for excludedInd: int in report.size():
+				var dupReport: Array[int] = report.duplicate()
+				dupReport.pop_at(excludedInd)
+				reportCheckResult = checkReport(dupReport)
+				if reportCheckResult == true:
+					safeReports += 1
+					print()
+					print("ORIGINAL")
+					print(report)
+					print("VAL REMOVED:")
+					print(report[excludedInd])
+					print("MODIFIED")
+					print(dupReport)
+					break
 	
 	solution = safeReports
 	
