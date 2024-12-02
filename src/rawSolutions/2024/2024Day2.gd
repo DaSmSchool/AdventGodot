@@ -102,4 +102,5 @@ func solve2(input: String) -> int:
 	
 	solution = safeReports
 	
+	
 	return solution
