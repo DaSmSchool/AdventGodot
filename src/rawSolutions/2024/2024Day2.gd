@@ -74,6 +74,10 @@ func solve2(input: String) -> int:
 		if reportCheckResult:
 			safeReports += 1
 		else:
+			print()
+			print_rich("[color=red]REJECTED:[/color]")
+			print_rich(report)
+			print_rich("[/color]")
 			var goodCount: int = 0
 			for excludedInd: int in report.size():
 				var dupReport: Array[int] = report.duplicate()
@@ -81,14 +85,20 @@ func solve2(input: String) -> int:
 				reportCheckResult = checkReport(dupReport)
 				if reportCheckResult == true:
 					safeReports += 1
-					print()
-					print("ORIGINAL")
-					print(report)
-					print("VAL REMOVED:")
-					print(report[excludedInd])
-					print("MODIFIED")
-					print(dupReport)
+					goodCount += 1
+					print_rich("[color=green]ACCEPTED[/color]")
+					print_rich("VAL REMOVED:")
+					print_rich(report[excludedInd])
+					print_rich("MODIFIED")
+					print_rich(dupReport)
 					break
+				else:
+					print_rich("[color=blue]NOT ACCEPTED[/color]")
+					print_rich("VAL REMOVED:")
+					print_rich(report[excludedInd])
+					print_rich("MODIFIED")
+					print_rich(dupReport)
+			
 	
 	solution = safeReports
 	
