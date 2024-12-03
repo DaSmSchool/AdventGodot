@@ -74,14 +74,12 @@ func solve2(input: String) -> int:
 		if reportCheckResult:
 			safeReports += 1
 		else:
-			var goodCount: int = 0
 			for excludedInd: int in report.size():
 				var dupReport: Array[int] = report.duplicate()
 				dupReport.pop_at(excludedInd)
 				reportCheckResult = checkReport(dupReport)
 				if reportCheckResult == true:
 					safeReports += 1
-					goodCount += 1
 					break
 			
 	
