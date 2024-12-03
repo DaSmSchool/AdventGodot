@@ -39,5 +39,19 @@ func solve1(input: String) -> int:
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
+	var allGroups: Array[PackedStringArray] = []
+	var dontSplit: PackedStringArray = input.split("don't()")
+	var multSum: int = 0
+	
+	for dontGroup: String in dontSplit:
+		var doSplit: PackedStringArray = dontGroup.split("do()")
+		allGroups.append(doSplit)
+	
+	for groupInd in allGroups.size():
+		for subgroupInd in allGroups[groupInd].size():
+			if groupInd == 0 or subgroupInd > 0:
+				multSum += solve1(allGroups[groupInd][subgroupInd])
+	
+	solution = multSum
 	
 	return solution
