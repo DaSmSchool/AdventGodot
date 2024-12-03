@@ -7,7 +7,7 @@ static func load_advent_input(year: int, day: int) -> String:
 	print_rich("[rainbow freq=1.0 sat=1.0 val=1.0][wave amp=50.0 freq=5.0 connected=1][color=green]YEAR %d | DAY %d[/color][/wave][/rainbow]" % [year, day])
 	if fileError != 0:
 		if fileError == 7:
-			print_rich("[color=red]ERROR: INPUT NOT FOUND![/color]")
+			print_rich("[color=red][shake rate=20.0 level=5 connected=1]ERROR: INPUT NOT FOUND![/shake][/color]")
 		else:
-			print_rich("[color=red]FAILED TO LOAD INPUT: ERROR" + str(fileError) + "[/color]")
+			print_rich("[color=red][shake rate=20.0 level=5 connected=1]FAILED TO LOAD INPUT: ERROR" + str(fileError) + "[/shake][/color]")
 	return fileContent
