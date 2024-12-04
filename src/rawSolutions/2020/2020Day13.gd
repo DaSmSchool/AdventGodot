@@ -52,7 +52,10 @@ func solve2(input: String) -> int:
 	
 	for busInd: int in validBuses.size():
 		if busInd != 0:
-			busGaps.append(buses.find(str(validBuses[busInd]))-buses.find(str(validBuses[busInd-1])))
+			# difference of amount of xs, defining gaps
+			busGaps.append(
+				buses.find( str(validBuses[busInd]) ) - buses.find( str(validBuses[busInd-1]) )
+				)
 	#print(busGaps)
 	
 	var focusInd: int = 0
@@ -60,37 +63,23 @@ func solve2(input: String) -> int:
 	var incrAmounts: Array = []
 	incrAmounts.append(validBuses[0])
 	var currentBusToFindInd: int = 1
-	var lastIndOfCurrentPattern: int = -1
-	var searchIndOffset: int = busGaps[currentBusToFindInd]
+	var firstIndOfCurrentPattern: int = -1
+	var searchIndOffset: int = busGaps[currentBusToFindInd-1]
 	
 	while !consecutiveFound:
 		focusInd += incrAmounts.back()
 		
-		var busModulos: Array = []
-		busModulos.append(focusInd % validBuses[0])
-		var indOff: int = 1
-		for bus: int in range(1, validBuses.size()):
-			var sOff: int = busGaps[bus-1]
-			busModulos.append((focusInd+sOff) % validBuses[bus])
-			
-		print(focusInd)
-		print(busModulos)
-		
 		if (focusInd+searchIndOffset) % validBuses[currentBusToFindInd] == 0:
-			if lastIndOfCurrentPattern == -1:
-				lastIndOfCurrentPattern = focusInd
-				firstIndsFound.append(lastIndOfCurrentPattern)
-			else:
-				currentBusToFindInd += 1
-				if currentBusToFindInd == validBuses.size():
-					consecutiveFound = true
+			if firstIndOfCurrentPattern == -1:
+				if currentBusToFindInd == validBuses.size()-1:
+					solution = focusInd
 					break
-				var incrementAmount = focusInd-lastIndOfCurrentPattern
-				incrAmounts.append(incrementAmount)
-				lastIndOfCurrentPattern = -1
+				firstIndOfCurrentPattern = focusInd
+			else:
+				incrAmounts.append(focusInd-firstIndOfCurrentPattern)
+				focusInd = firstIndOfCurrentPattern-incrAmounts.back()
+				currentBusToFindInd += 1
 				searchIndOffset += busGaps[currentBusToFindInd-1]
-				
-		
-	solution = firstIndsFound.back()
-	
+				firstIndOfCurrentPattern = -1
+	print(incrAmounts)
 	return solution
