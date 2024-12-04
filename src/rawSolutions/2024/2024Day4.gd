@@ -35,22 +35,34 @@ func check_for_xmas(grid: Array, x: int, y: int) -> int:
 
 func check_for_cross_mas(grid: Array, x: int, y: int) -> int:
 	if grid[x][y] != "A": return 0
-	var xmasCount: int = 0
-	var isXmasCount: int = 0
-	for currCharInd: int in range(-1, 2, 2):
-		var focusX1: int = x + currCharInd
-		var focusY1: int = y + currCharInd
-		var focusX2: int = x + currCharInd*-1
-		var focusY2: int = y + currCharInd*-1
-		if (focusX1 >= 0 and focusX1 < grid[0].size()) and (focusY1 >= 0 and focusY1 < grid.size()) and (focusX2 >= 0 and focusX2 < grid[0].size()) and (focusY2 >= 0 and focusY2 < grid.size()):
-			if (grid[focusY1][focusX1] == "M" and grid[focusY2][focusX2] == "S") or (grid[focusY1][focusX1] == "S" and grid[focusY2][focusX2] == "M"):
-				isXmasCount += 1
-		else:
-			break
-	if isXmasCount == 2: 
-		#print("FOUND: X==%d, Y==%d, oX==%d, oY==%d" % [x, y , xOff, yOff])
-		xmasCount += 1
-	return xmasCount
+	
+	var diagChars: Array[String] = []
+	for r in range(-1, 2, 2):
+		for c in range(-1, 2, 2):
+			if r == 0 and c == 0: continue
+			var focX: int = x + c
+			var focY: int = y + r
+			if focX < 0 or focX >= grid[0].size(): continue
+			if focY < 0 or focY >= grid.size(): continue
+			diagChars.append(grid[focX][focY])
+	if diagChars.size() != 4: return 0
+	#print(diagChars)
+	for letter: String in diagChars:
+		if letter != "S" and letter != "M": return 0
+	
+	var diagSplit: Array = []
+	diagSplit.append(diagChars.slice(0, 2))
+	diagSplit.append(diagChars.slice(2))
+	#print(diagSplit)
+	
+	if (diagSplit[0][0] == diagSplit[0][1]):
+		if (diagSplit[1][0] == diagSplit[1][1] and (diagSplit[0][0] != diagSplit[1][0])):
+			return 1
+	elif (diagSplit[0][0] == diagSplit[1][0]):
+		if (diagSplit[0][1] == diagSplit[1][1] and (diagSplit[0][0] != diagSplit[0][1])):
+			return 1
+	
+	return 0
 
 func solve1(input: String) -> int:
 	var solution: int = 0
