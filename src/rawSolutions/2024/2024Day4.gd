@@ -33,6 +33,25 @@ func check_for_xmas(grid: Array, x: int, y: int) -> int:
 				xmasCount += 1
 	return xmasCount
 
+func check_for_cross_mas(grid: Array, x: int, y: int) -> int:
+	if grid[x][y] != "A": return 0
+	var xmasCount: int = 0
+	var isXmasCount: int = 0
+	for currCharInd: int in range(-1, 2, 2):
+		var focusX1: int = x + currCharInd
+		var focusY1: int = y + currCharInd
+		var focusX2: int = x + currCharInd*-1
+		var focusY2: int = y + currCharInd*-1
+		if (focusX1 >= 0 and focusX1 < grid[0].size()) and (focusY1 >= 0 and focusY1 < grid.size()) and (focusX2 >= 0 and focusX2 < grid[0].size()) and (focusY2 >= 0 and focusY2 < grid.size()):
+			if (grid[focusY1][focusX1] == "M" and grid[focusY2][focusX2] == "S") or (grid[focusY1][focusX1] == "S" and grid[focusY2][focusX2] == "M"):
+				isXmasCount += 1
+		else:
+			break
+	if isXmasCount == 2: 
+		#print("FOUND: X==%d, Y==%d, oX==%d, oY==%d" % [x, y , xOff, yOff])
+		xmasCount += 1
+	return xmasCount
+
 func solve1(input: String) -> int:
 	var solution: int = 0
 	
@@ -54,5 +73,19 @@ func solve1(input: String) -> int:
 
 func solve2(input: String) -> int:
 	var solution: int = 0
+	
+	var inputSplit: PackedStringArray = input.split("\n")
+	var crossGrid: Array[PackedStringArray] = []
+	
+	for line: String in inputSplit:
+		if line == "" : continue
+		crossGrid.append(line.split())
+	
+	var xmasCount: int = 0
+	for rInd: int in crossGrid.size():
+		for cInd: int in crossGrid[rInd].size():
+			xmasCount += check_for_cross_mas(crossGrid, cInd, rInd)
+	
+	solution = xmasCount
 	
 	return solution
