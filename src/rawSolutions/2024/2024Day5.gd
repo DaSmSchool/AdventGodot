@@ -15,7 +15,7 @@ func solve1(input: String) -> int:
 	var solution: int = 0
 	
 	var inputSections: PackedStringArray = input.split("\n\n")
-	print(inputSections[0])
+	#print(inputSections[0])
 	
 	var pageOrdRules: Dictionary = {}
 	var pageOrdRulesRev: Dictionary = {}
@@ -50,24 +50,26 @@ func solve1(input: String) -> int:
 		for rawVal: String in updateVals: updateValList.append(rawVal.to_int())
 		updates.append(updateValList)
 	
-	print("ASDASD" + str(updates))
-	
 	for upd: Array[int] in updates:
 		var isValid: bool = true
 		for val: int in upd:
 			if pageOrdRules.has(val):
 				var compareIndArray: Array = pageOrdRules[val]
-				print(pageOrdRules)
+				#print(pageOrdRules)
 				for cmp: int in compareIndArray:
-					if upd.has(cmp) and upd.find(val) < upd.find(cmp):
-						pass
-					else: 
-						isValid = false
-						break
+					if upd.has(cmp):
+						if upd.find(val) < upd.find(cmp):
+							pass
+						else: 
+							isValid = false
+							break
 				if !isValid: break
 		if isValid: validUpdates.append(upd)
 	
-	print(validUpdates)
+	#print(validUpdates)
+	
+	for update: Array in validUpdates:
+		solution += update[floor(update.size()/2)]
 	
 	return solution
 
