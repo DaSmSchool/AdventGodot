@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://wxuoee08fu86"]
+[gd_scene load_steps=22 format=3 uid="uid://wxuoee08fu86"]
 
 [ext_resource type="Script" path="res://src/run_solutions.gd" id="1_2trj4"]
 [ext_resource type="Script" path="res://src/rawSolutions/2020/2020Day1.gd" id="1_vy5lq"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://src/rawSolutions/2020/2020Day13.gd" id="14_g602s"]
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day1.gd" id="14_nnjs1"]
 [ext_resource type="Script" path="res://src/rawSolutions/2020/2020Day14.gd" id="15_anjsy"]
+[ext_resource type="Script" path="res://src/rawSolutions/2020/2020Day15.gd" id="16_4x3tj"]
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day2.gd" id="16_akyh1"]
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day3.gd" id="17_f017q"]
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day4.gd" id="18_48657"]
@@ -68,6 +69,9 @@ script = ExtResource("14_g602s")
 
 [node name="Day14" type="Node" parent="2020"]
 script = ExtResource("15_anjsy")
+
+[node name="Day15" type="Node" parent="2020"]
+script = ExtResource("16_4x3tj")
 
 [node name="2024" type="Node" parent="."]
 
