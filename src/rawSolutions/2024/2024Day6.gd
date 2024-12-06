@@ -38,20 +38,20 @@ func solve1(input: String) -> int:
 	while guardCanAction:
 		if !visitedTiles.has([guardX, guardY]):
 			visitedTiles.get_or_add([guardX, guardY], true)
-		print("X: %d, Y: %d" % [guardX, guardY])
+		#print("X: %d, Y: %d" % [guardX, guardY])
 		
 		var nextTile: Vector2 = Vector2(guardX+guardDir.x, guardY+guardDir.y)
 		
 		# oob
-		print(is_equal_approx(nextTile.x, -1))
-		print(is_equal_approx(nextTile.y, -1))
+		#print(is_equal_approx(nextTile.x, -1))
+		#print(is_equal_approx(nextTile.y, -1))
 		if is_equal_approx(nextTile.x, -1) or is_equal_approx(nextTile.y, -1) or nextTile.x >= grid[0].size() or nextTile.y >= grid.size():
 			guardCanAction = false
 		elif grid[nextTile.y][nextTile.x] == "#":
 			guardDir = guardDir.rotated(deg_to_rad(90))
 			if is_zero_approx(guardDir.x): guardDir.x = 0.0
 			if is_zero_approx(guardDir.y): guardDir.y = 0.0
-			print(guardDir)
+			#print(guardDir)
 		else:
 			guardX += guardDir.x
 			guardY += guardDir.y
