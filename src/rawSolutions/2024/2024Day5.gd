@@ -109,6 +109,7 @@ func solve2(input: String) -> int:
 		if isValid: validUpdates.append(upd)
 		else: invalidUpdates.append(upd)
 	
+	# bubble sort based off presence in pageOrdRules
 	for update in invalidUpdates:
 		var needSort: bool = true
 		while needSort:
