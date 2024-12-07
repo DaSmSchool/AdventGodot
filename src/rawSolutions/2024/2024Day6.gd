@@ -152,6 +152,11 @@ func solve2(input: String) -> int:
 			guardPos.x += guardDir.x
 			guardPos.y += guardDir.y
 	
+	# this double checks the actual grid searching process for extraneous obstacles.
+	# i have no idea why the original pass of obstacle checking doesn't work.
+	# i have tried skipping tiles that were already checked and on the path previously.
+	# this just happened to line up with the answer i got from someone else's program
+	# i have never cared about speed until it matters
 	var doubleCheck: Dictionary = {}
 	for obs: Vector2 in validObsTiles:
 		subSearch(init, Vector2(0, -1), grid, obs, doubleCheck)
