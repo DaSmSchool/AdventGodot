@@ -79,10 +79,11 @@ func subSearch(initPos: Vector2, initDir: Vector2, grid: Array[PackedStringArray
 			
 			#if !validObsTiles.has(subPos): 
 			validObsTiles.get_or_add(addedObstacleCoord, true)
-			subGrid[addedObstacleCoord.y][addedObstacleCoord.x] = "O"
+			#subGrid[addedObstacleCoord.y][addedObstacleCoord.x] = "O"
 			#print()
 			#for row: PackedStringArray in subGrid:
 				#print(row)
+			
 			break
 		var nextTile: Vector2 = Vector2(subPos.x+subDir.x, subPos.y+subDir.y)
 		
@@ -144,7 +145,7 @@ func solve2(input: String) -> int:
 			if is_zero_approx(guardDir.x): guardDir.x = 0.0
 			if is_zero_approx(guardDir.y): guardDir.y = 0.0
 			#print(guardDir)
-		else:
+		elif grid[nextTile.y][nextTile.x] == ".":
 			if init != nextTile:
 				subSearch(guardPos, guardDir, grid, nextTile, visitedTiles)
 			guardPos.x += guardDir.x
