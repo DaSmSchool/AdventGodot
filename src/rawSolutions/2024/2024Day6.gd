@@ -62,7 +62,7 @@ func solve1(input: String) -> int:
 
 var validObsTiles: Dictionary = {}
 
-func subSearch(initPos: Vector2, initDir: Vector2, grid: Array[PackedStringArray], addedObstacleCoord: Vector2, visited: Dictionary) -> void:
+func subSearch(initPos: Vector2, initDir: Vector2, grid: Array[PackedStringArray], addedObstacleCoord: Vector2, valid: Dictionary) -> void:
 	var subPos: Vector2 = Vector2(initPos)
 	var subDir: Vector2 = Vector2(initDir)
 	var subGrid: Array[PackedStringArray] = grid.duplicate(true)
@@ -74,17 +74,18 @@ func subSearch(initPos: Vector2, initDir: Vector2, grid: Array[PackedStringArray
 	while guardCanAction:
 		#print("X: %d, Y: %d" % [guardX, guardY])
 		if !subVisitedTiles.has([subPos, subDir]):
-			subVisitedTiles.get_or_add([subPos, subDir], true)
+			subVisitedTiles.get_or_add([subPos, subDir], 1)
 		else:
+			subVisitedTiles[[subPos, subDir]] += 1
+			if subVisitedTiles[[subPos, subDir]] == 4:
+				#if !validObsTiles.has(subPos): 
+				valid.get_or_add(addedObstacleCoord, true)
+				#subGrid[addedObstacleCoord.y][addedObstacleCoord.x] = "O"
+				#print()
+				#for row: PackedStringArray in subGrid:
+					#print(row)
 			
-			#if !validObsTiles.has(subPos): 
-			validObsTiles.get_or_add(addedObstacleCoord, true)
-			#subGrid[addedObstacleCoord.y][addedObstacleCoord.x] = "O"
-			#print()
-			#for row: PackedStringArray in subGrid:
-				#print(row)
-			
-			break
+				break
 		var nextTile: Vector2 = Vector2(subPos.x+subDir.x, subPos.y+subDir.y)
 		
 		# oob
@@ -146,11 +147,15 @@ func solve2(input: String) -> int:
 			if is_zero_approx(guardDir.y): guardDir.y = 0.0
 			#print(guardDir)
 		elif grid[nextTile.y][nextTile.x] == ".":
-			if init != nextTile:
-				subSearch(guardPos, guardDir, grid, nextTile, visitedTiles)
+			if init != nextTile and !validObsTiles.has(nextTile):
+				subSearch(guardPos, guardDir, grid, nextTile, validObsTiles)
 			guardPos.x += guardDir.x
 			guardPos.y += guardDir.y
 	
-	solution = validObsTiles.keys().size()
+	var doubleCheck: Dictionary = {}
+	for obs: Vector2 in validObsTiles:
+		subSearch(init, Vector2(0, -1), grid, obs, doubleCheck)
+	
+	solution = doubleCheck.keys().size()
 	
 	return solution
