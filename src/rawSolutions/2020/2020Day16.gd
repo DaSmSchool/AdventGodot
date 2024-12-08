@@ -89,7 +89,7 @@ func solve2(input: String) -> int:
 		rules.get_or_add(ruleName, ruleRanges)
 	
 	var myTicketRaw: String = inputSplit[1].split("\n")[1]
-	for num: String in myTicketRaw:
+	for num: String in myTicketRaw.split(","):
 		myTicket.append(num.to_int())
 	
 	var otherTicketsRaw: PackedStringArray = inputSplit[2].split("\n")
@@ -133,7 +133,43 @@ func solve2(input: String) -> int:
 						break
 				if !validForRule: possibleCategories[possiblesInd].erase(rule)
 	
-	for possible in possibleCategories:
-		print(possible)
+		
+	# remove redundant rules by checking for indeces that have 1 possible rule, then removing that rule from other indeces
+	
+	# thanks visualisation helper that screwed me up :3
+	#possibleCategories.sort_custom(func(a, b): return a.size() < b.size())
+	
+	var checkedRules: Array = []
+	
+	var highlightInd: int = 0
+	
+	while highlightInd < possibleCategories.size():
+		var focusArray: Array = possibleCategories[highlightInd]
+		if focusArray.size() == 1 and !checkedRules.has(focusArray[0]):
+			#print(focusArray[0])
+			for clearArray: int in possibleCategories.size():
+				#print(possibleCategories[clearArray])
+				if possibleCategories[clearArray].size() != 1:
+					possibleCategories[clearArray].erase(focusArray[0])
+				#print(possibleCategories[clearArray])
+			highlightInd = 0
+			checkedRules.append(focusArray[0])
+			continue
+		highlightInd += 1
+	
+	var ruleToInd: Dictionary = {}
+	
+	for possibleInd: int in possibleCategories.size():
+		ruleToInd.get_or_add(possibleCategories[possibleInd][0], myTicket[possibleInd])
+	
+	var departureMult: int = 1
+	
+	for rule: String in ruleToInd.keys():
+		if rule.contains("departure "):
+			departureMult *= ruleToInd[rule]
+	
+	#print(ruleToInd)
+	
+	solution = departureMult
 	
 	return solution
