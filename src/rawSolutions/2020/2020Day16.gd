@@ -35,7 +35,7 @@ func solve1(input: String) -> int:
 		rules.get_or_add(ruleName, ruleRanges)
 	
 	var myTicketRaw: String = inputSplit[1].split("\n")[1]
-	for num: String in myTicketRaw:
+	for num: String in myTicketRaw.split(","):
 		myTicket.append(num.to_int())
 	
 	var otherTicketsRaw: PackedStringArray = inputSplit[2].split("\n")
