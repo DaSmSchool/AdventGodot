@@ -10,9 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Advent Gd 2024"
+config/name="AdventGodot"
 run/main_scene="res://scenes/advent_solutions.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
+boot_splash/bg_color=Color(0.0588235, 0.0588235, 0.137255, 1)
 config/icon="res://icon.svg"
 
 [autoload]
@@ -21,8 +22,8 @@ Global="*res://src/helper.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [gui]
 
