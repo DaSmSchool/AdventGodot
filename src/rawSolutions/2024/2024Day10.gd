@@ -16,7 +16,6 @@ func rec_search1(start: Vector2i, grid: Array):
 	var headCount: int = 0
 	var searchPos: Vector2i = Vector2i(start)
 	
-	
 	var pathsFound: int = 0
 	
 	while grid[searchPos.y][searchPos.x] != 9:
@@ -56,7 +55,10 @@ func solve1(input: String) -> int:
 		if line == "": continue
 		var intArr: Array[int] = []
 		for char: String in line:
-			intArr.append(char.to_int())
+			if char.is_valid_int():
+				intArr.append(char.to_int())
+			else:
+				intArr.append(-1)
 		grid.append(intArr)
 	
 	for rowInd: int in grid.size():
