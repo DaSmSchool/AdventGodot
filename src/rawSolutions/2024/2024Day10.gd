@@ -10,11 +10,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-var countedHeads1: Array[Vector2i]
+var countedHeads1: Array[Vector2i] = []
 
 func rec_search1(start: Vector2i, grid: Array):
 	var headCount: int = 0
 	var searchPos: Vector2i = Vector2i(start)
+	
+	
+	var pathsFound: int = 0
 	
 	while grid[searchPos.y][searchPos.x] != 9:
 		
@@ -37,7 +40,7 @@ func rec_search1(start: Vector2i, grid: Array):
 				headCount += rec_search1(adjacent, grid)
 			break
 		
-	if grid[searchPos.y][searchPos.x] == 9 and !countedHeads1.has(searchPos):
+	if grid[searchPos.y][searchPos.x] == 9 and !countedHeads1.has(searchPos): 
 		countedHeads1.append(searchPos)
 		return headCount+1
 	
@@ -65,8 +68,9 @@ func solve1(input: String) -> int:
 	var trailheadCount: int = 0
 	
 	for startPosInd: int in startPositions.size():
+		countedHeads1 = []
 		trailheadCount += rec_search1(startPositions[startPosInd], grid)
-	
+		#print(trailheadCount)
 	solution = trailheadCount
 	
 	return solution
