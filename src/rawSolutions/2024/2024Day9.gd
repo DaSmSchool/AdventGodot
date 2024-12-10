@@ -73,16 +73,18 @@ func solve2(input: String) -> int:
 	
 	var focusNum: int = assemble.max()
 	while focusNum >= 0:
+		#print("Foc: %d" % focusNum)
 		var numEndInd: int = assemble.rfind(focusNum)
 		var extentInd = 0
 		var numAmount = 0
-		while assemble[extentInd] == focusNum:
+		while assemble[numEndInd+extentInd] == focusNum:
 			numAmount += 1
 			extentInd -= 1
 		
 		var forwardSearch: int = 0
 		while assemble[forwardSearch] != focusNum:
 			if assemble[forwardSearch] == -1:
+				#print(assemble)
 				var emptyExtentInd = 0
 				var emptyNumAmount = 0
 				while assemble[forwardSearch+emptyExtentInd] == -1:
@@ -90,13 +92,16 @@ func solve2(input: String) -> int:
 					emptyExtentInd -= 1
 				if emptyNumAmount >= numAmount:
 					for numOff: int in numAmount:
-						assemble[forwardSearch+numOff] = focusNum
-						assemble[numEndInd-numAmount+numOff] = -1
+						#print("%d %d" % [numOff, forwardSearch])
+						assemble[forwardSearch+emptyExtentInd+numOff+1] = focusNum
+						assemble[numEndInd-numAmount+numOff+1] = -1
+					forwardSearch = -1
+					break
 			forwardSearch += 1
 		
 		focusNum -= 1
 	
-	print(assemble)
+	#print(assemble)
 	
 	for charInd: int in assemble.size():
 		if assemble[charInd] != -1:
