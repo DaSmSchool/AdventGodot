@@ -78,7 +78,64 @@ func solve1(input: String) -> int:
 	return solution
 
 
+func rec_search2(start: Vector2i, grid: Array):
+	var headCount: int = 0
+	var searchPos: Vector2i = Vector2i(start)
+	
+	while grid[searchPos.y][searchPos.x] != 9:
+		
+		var adjacents: Array[Vector2i] = []
+		for yCheck: int in range(-1, 2, 1):
+			for xCheck: int in range(-1, 2, 1):
+				if (yCheck == 0 and xCheck != 0) or (yCheck != 0 and xCheck == 0):pass 
+				else: continue
+				var focusX: int = searchPos.x+xCheck
+				var focusY: int = searchPos.y+yCheck
+				if focusY < 0 or focusY >= grid.size() or focusX < 0 or focusX >= grid[0].size():
+					pass
+				else:
+					if grid[focusY][focusX] == grid[searchPos.y][searchPos.x]+1:
+						adjacents.append(Vector2i(focusX, focusY))
+		
+		if adjacents.size() == 0: return 0
+		elif adjacents.size() == 1: searchPos = adjacents[0]
+		else:
+			for adjacent: Vector2i in adjacents:
+				headCount += rec_search2(adjacent, grid)
+			break
+		
+	if grid[searchPos.y][searchPos.x] == 9: 
+		return headCount+1
+	
+	return headCount
+
 func solve2(input: String) -> int:
 	var solution: int = 0
+	
+	var grid: Array = []
+	var startPositions: Array[Vector2i] = []
+	
+	for line: String in input.split("\n"):
+		if line == "": continue
+		var intArr: Array[int] = []
+		for char: String in line:
+			if char.is_valid_int():
+				intArr.append(char.to_int())
+			else:
+				intArr.append(-1)
+		grid.append(intArr)
+	
+	for rowInd: int in grid.size():
+		for colInd: int in grid[rowInd].size():
+			var checkedVal = grid[rowInd][colInd]
+			if checkedVal == 0:
+				startPositions.append(Vector2i(colInd, rowInd))
+	
+	var trailheadCount: int = 0
+	
+	for startPosInd: int in startPositions.size():
+		trailheadCount += rec_search2(startPositions[startPosInd], grid)
+		#print(trailheadCount)
+	solution = trailheadCount
 	
 	return solution
