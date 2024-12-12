@@ -14,3 +14,6 @@ static func load_advent_input(year: int, day: int) -> String:
 		else:
 			print_fail("FAILED TO LOAD INPUT: ERROR" + str(fileError))
 	return fileContent
+
+static func valid_pos_at_grid(yInd: int, xInd: int, grid: Array) -> bool:
+	return 0 <= yInd and yInd < grid.size() and 0 <= xInd and xInd < grid[0].size()
