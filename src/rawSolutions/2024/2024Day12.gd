@@ -11,6 +11,24 @@ func _process(delta: float) -> void:
 	pass
 
 
+func get_group(yPos: int, xPos: int, grid: Array) -> Array:
+	var returnGrid: Array = []
+	var grabbedGrid: Array[Vector2i] = [Vector2i(xPos, yPos)]
+	
+	while grabbedGrid.size() != 0:
+		var focusPoints: Array[Vector2i] = grabbedGrid.duplicate(true)
+		grabbedGrid = []
+		for point: Vector2i in focusPoints:
+			for yInd: int in range(-1, 2, 1):
+				for xInd: int in range(-1, 2, 1):
+					if abs(yInd) != abs(xInd) and Helper.valid_pos_at_grid(point.y+yInd, point.x+xInd, grid):
+						if grid[point.y][point.x] == grid[point.y+yInd][point.x+xInd]:
+							grabbedGrid.append(Vector2(point.x+xInd, point.y+yInd))
+
+		returnGrid.append_array(grabbedGrid)
+	
+	return returnGrid
+
 func solve1(input: String) -> int:
 	var solution: int = 0
 	
@@ -27,19 +45,13 @@ func solve1(input: String) -> int:
 	var groupsMade: Dictionary = {}
 	var gardenIndLists: Array = []
 	
+	var assignGroup: String = grid[0][0]
+	
+	
 	for lineInd: int in grid.size():
-		var assignGroup: String = grid[lineInd][0]
-		if groupsMade.has(assignGroup):
-			groupsMade[assignGroup].append(groupsMade[assignGroup].back()+1)
-		else:
-			groupsMade.get_or_add(assignGroup, [0])
 		for charInd in grid[0].size():
-			var focusChar = grid[lineInd][charInd]
-			if focusChar != assignGroup:
-				
 			
-			if lineInd == 0:
-				if charInd !=
+			
 	
 	
 	
