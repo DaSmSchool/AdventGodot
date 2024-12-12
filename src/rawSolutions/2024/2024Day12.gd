@@ -46,7 +46,7 @@ func solve1(input: String) -> int:
 	var gardenIndLists: Array = []
 	
 	var assignGroup: String = grid[0][0]
-	
+	groupsMade
 	
 	for lineInd: int in grid.size():
 		for charInd in grid[0].size():
