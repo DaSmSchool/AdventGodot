@@ -160,7 +160,8 @@ func solve2(input: String) -> int:
 			var gardenArea: int = 0
 			var gardenSides: int = 0
 			var isolatedGrid: Array = make_isolated_grid(garden, key)
-			
+			Helper.print_grid(isolatedGrid)
+			print()
 			for row: Array in isolatedGrid:
 				for col: String in row:
 					if col == key: gardenArea += 1
