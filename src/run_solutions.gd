@@ -20,7 +20,7 @@ func run_solution(year: int, day: int) -> void:
 	
 	# p1 run
 	microTime = Time.get_ticks_msec()
-	p1Sol = solNode.solve1(adventInput)
+	p1Sol = await solNode.solve1(adventInput)
 	postMicroTime = Time.get_ticks_msec()
 	
 	var p1Elapsed: float = postMicroTime - microTime
@@ -32,7 +32,7 @@ func run_solution(year: int, day: int) -> void:
 	
 	# p2 run
 	microTime = Time.get_ticks_msec()
-	p2Sol = solNode.solve2(adventInput)
+	p2Sol = await solNode.solve2(adventInput)
 	postMicroTime = Time.get_ticks_msec()
 	
 	var p2Elapsed: float = postMicroTime - microTime
