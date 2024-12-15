@@ -85,7 +85,7 @@ func solve1(input: String) -> int:
 	
 	return solution
 
-
+# this solution based off an assumption that the "easter egg" will comprise of a region that is full of adjacent robots.
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
