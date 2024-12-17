@@ -46,7 +46,6 @@ func solve1(input: String) -> int:
 				startPos = Vector2i(charInd, rowInd)
 				visitedSpots.get_or_add(Vector2i(charInd, rowInd), ">")
 			elif grid[rowInd][charInd] == "E":
-				grid[rowInd][charInd] = "."
 				finishPos = Vector2i(charInd, rowInd)
 				unvisitedSpots.get_or_add(Vector2i(charInd, rowInd), INF)
 	
@@ -66,6 +65,7 @@ func solve1(input: String) -> int:
 		
 		#print(spotsToVisit)
 		#print(focusSpot)
+		#print()
 		
 		if focusSpot[0] == finishPos:
 			possiblePaths.append(focusSpot[1])
@@ -76,7 +76,7 @@ func solve1(input: String) -> int:
 			for xOff: int in range(-1, 2):
 				var offsetSpot: Vector2i = Vector2i(focusSpot[0].x + xOff, focusSpot[0].y + yOff)
 				var dirVec: Vector2i = Vector2i(xOff, yOff)
-				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]) and unvisitedSpots.has(offsetSpot) and !visitedSpots.has(offsetSpot):
+				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]) and unvisitedSpots.has(offsetSpot):
 					var visitSpotPath: String = String(focusSpot[1])
 					if dirVec == Vector2i.UP:
 						visitSpotPath += "^"
@@ -95,9 +95,14 @@ func solve1(input: String) -> int:
 				
 		spotsToVisit.erase(focusSpot)
 	
+	var pathScores: Array[int] = []
 	for path: String in possiblePaths:
 		print(">"+path)
-		print(get_path_length(">"+path))
+		var pathScore: int = get_path_length(">"+path)
+		print(pathScore)
+		pathScores.append(pathScore)
+	
+	solution = pathScores.min()
 	
 	return solution
 
