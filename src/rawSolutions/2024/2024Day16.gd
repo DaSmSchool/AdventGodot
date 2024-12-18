@@ -23,6 +23,17 @@ func get_path_length(path: String) -> int:
 	return pathLength
 
 
+func get_path_length_no_turn(path: String) -> int:
+	var pathLength: int = 0
+	
+	for charInd: int in path.length():
+		if charInd == 0: pass
+		else:
+			pathLength += 1
+	
+	return pathLength
+
+
 func solve1(input: String) -> int:
 	var solution: int = 0
 	
@@ -44,16 +55,16 @@ func solve1(input: String) -> int:
 				unvisitedSpots.get_or_add(Vector2i(charInd, rowInd), INF)
 			elif grid[rowInd][charInd] == "S":
 				startPos = Vector2i(charInd, rowInd)
-				visitedSpots.get_or_add(Vector2i(charInd, rowInd), ">")
+				visitedSpots.get_or_add(Vector2i(charInd, rowInd), [""])
 			elif grid[rowInd][charInd] == "E":
 				finishPos = Vector2i(charInd, rowInd)
 				unvisitedSpots.get_or_add(Vector2i(charInd, rowInd), INF)
 	
 	var hasSearchable: bool = true
 	
-	var possiblePaths: PackedStringArray = []
+	var possiblePaths: Dictionary = {}
 	var spotsToVisit: Array = []
-	spotsToVisit.append([startPos, ""])
+	spotsToVisit.append([startPos, [">"]])
 	
 	while spotsToVisit.size() != 0:
 		
@@ -61,44 +72,56 @@ func solve1(input: String) -> int:
 		if spotsToVisit.size() == 1:
 			focusSpot = spotsToVisit[0]
 		else: 
-			focusSpot = spotsToVisit.reduce(func(min, spot): return spot if get_path_length(spot[1]) < get_path_length(min[1]) else min)
+			focusSpot = spotsToVisit.reduce(func(min, spot): return spot if get_path_length(spot[1][0]) < get_path_length(min[1][0]) else min)
 		
 		#print(spotsToVisit)
-		#print(focusSpot)
-		#print()
+		print(focusSpot)
+		print()
 		
 		if focusSpot[0] == finishPos:
-			possiblePaths.append(focusSpot[1])
-			spotsToVisit.erase(focusSpot)
-			continue
+			for path: String in focusSpot[1]:
+				possiblePaths.get_or_add(path)
+		
 		
 		for yOff: int in range(-1, 2):
 			for xOff: int in range(-1, 2):
 				var offsetSpot: Vector2i = Vector2i(focusSpot[0].x + xOff, focusSpot[0].y + yOff)
 				var dirVec: Vector2i = Vector2i(xOff, yOff)
-				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]) and unvisitedSpots.has(offsetSpot):
-					var visitSpotPath: String = String(focusSpot[1])
-					if dirVec == Vector2i.UP:
-						visitSpotPath += "^"
-					elif dirVec == Vector2i.DOWN:
-						visitSpotPath += "v"
-					elif dirVec == Vector2i.LEFT:
-						visitSpotPath += "<"
-					elif dirVec == Vector2i.RIGHT:
-						visitSpotPath += ">"
+				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]):
+					var visitSpotPaths: Array = focusSpot[1].duplicate()
 					
-					spotsToVisit.append([offsetSpot, visitSpotPath])
+					for strInd: int in visitSpotPaths.size():
+						if dirVec == Vector2i.UP:
+							visitSpotPaths[strInd] += "^"
+						elif dirVec == Vector2i.DOWN:
+							visitSpotPaths[strInd] += "v"
+						elif dirVec == Vector2i.LEFT:
+							visitSpotPaths[strInd] += "<"
+						elif dirVec == Vector2i.RIGHT:
+							visitSpotPaths[strInd] += ">"
+					
+					if !unvisitedSpots.has(offsetSpot):
+						if get_path_length_no_turn(visitSpotPaths[0]) < get_path_length_no_turn(visitedSpots[offsetSpot][0]):
+							visitedSpots[offsetSpot] = visitSpotPaths
+						elif get_path_length_no_turn(visitSpotPaths[0]) == get_path_length_no_turn(visitedSpots[offsetSpot][0]):
+							visitedSpots[offsetSpot].append_array(visitSpotPaths)
+						else:
+							continue
+					
+					
+					
+					spotsToVisit.append([offsetSpot, visitSpotPaths])
 					
 					if grid[offsetSpot.y][offsetSpot.x] == ".":
 						unvisitedSpots.erase(offsetSpot)
-						visitedSpots.get_or_add(offsetSpot, visitSpotPath)
+						visitedSpots.get_or_add(offsetSpot, visitSpotPaths)
 				
 		spotsToVisit.erase(focusSpot)
 	
 	var pathScores: Array[int] = []
 	for path: String in possiblePaths:
-		print(">"+path)
-		var pathScore: int = get_path_length(">"+path)
+		print(path)
+		var pathScore: int = get_path_length(path)
 		print(pathScore)
 		pathScores.append(pathScore)
 	
