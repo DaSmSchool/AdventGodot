@@ -153,17 +153,18 @@ func solve1(input: String) -> int:
 					
 					var visitSpotPaths: Array = []
 					
-					for checkSpot: Array in spotsToVisit:
-						if checkSpot[0] != focusSpot[0]: continue
+					for checkSpotInd: int in spotsToVisit.size():
+						if spotsToVisit[checkSpotInd][0] != focusSpot[0]: continue
 						
-						if get_path_length(focusSpot[1][0]+dirString) < get_path_length(checkSpot[1][0]):
+						if get_path_length(focusSpot[1][0]+dirString) < get_path_length(spotsToVisit[checkSpotInd][1][0]):
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
-							checkSpot[1] = visitSpotPaths
-						elif get_path_length(focusSpot[1][0]+dirString) == get_path_length(checkSpot[1][0]):
+							spotsToVisit[checkSpotInd][1] = visitSpotPaths
+						elif get_path_length(focusSpot[1][0]+dirString) == get_path_length(spotsToVisit[checkSpotInd][1][0]):
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
-							checkSpot[1].append_array(visitSpotPaths)
-							
+							spotsToVisit[checkSpotInd][1].append_array(visitSpotPaths)
+						print(spotsToVisit)
 						continue
+					
 					
 					if visitSpotPaths.is_empty():
 						visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
