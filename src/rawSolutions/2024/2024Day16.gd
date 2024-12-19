@@ -5,6 +5,8 @@ extends Node
 func _ready() -> void:
 	pass # Replace with function body.
 
+var unvisitedSpots: Dictionary = {}
+var visitedSpots: Dictionary = {}
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -65,6 +67,13 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 	
 	if smaller:
 		for spot: Array in sameTargetArray:
+			for yOff: int in range(-1, 2):
+				for xOff: int in range(-1, 2):
+					var offsetSpot: Vector2i = Vector2i(spot[0].x + xOff, spot[0].y + yOff)
+					if abs(yOff) != abs(xOff) and visitedSpots.has(offsetSpot):
+						visitedSpots.erase(offsetSpot)
+						unvisitedSpots.get_or_add(offsetSpot, INF)
+			
 			masterArr.erase(spot)
 		masterArr.append(attemptAdd)
 	
@@ -79,8 +88,8 @@ func solve1(input: String) -> int:
 		if row == "": continue
 		grid.append(row.split(""))
 	
-	var unvisitedSpots: Dictionary = {}
-	var visitedSpots: Dictionary = {}
+	unvisitedSpots = {}
+	visitedSpots = {}
 	var startPos: Vector2i = Vector2i()
 	var finishPos: Vector2i = Vector2i()
 	
@@ -131,14 +140,26 @@ func solve1(input: String) -> int:
 				var offsetSpot: Vector2i = Vector2i(focusSpot[0].x + xOff, focusSpot[0].y + yOff)
 				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]) and unvisitedSpots.has(offsetSpot):
 					var dirVec: Vector2i = Vector2i(xOff, yOff)
+					
+					var dirString: String = ""
+					if dirVec == Vector2i.UP:
+						dirString += "^"
+					elif dirVec == Vector2i.DOWN:
+						dirString += "v"
+					elif dirVec == Vector2i.LEFT:
+						dirString += "<"
+					elif dirVec == Vector2i.RIGHT:
+						dirString += ">"
+					
 					var visitSpotPaths: Array = []
 					
 					for checkSpot: Array in spotsToVisit:
 						if checkSpot[0] != focusSpot[0]: continue
-						if get_path_length_no_turn(focusSpot[1][0]+".") < get_path_length_no_turn(checkSpot[1][0]):
+						
+						if get_path_length(focusSpot[1][0]+dirString) < get_path_length(checkSpot[1][0]):
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
 							checkSpot[1] = visitSpotPaths
-						elif get_path_length_no_turn(focusSpot[1][0]+".") == get_path_length_no_turn(checkSpot[1][0]):
+						elif get_path_length(focusSpot[1][0]+dirString) == get_path_length(checkSpot[1][0]):
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
 							checkSpot[1].append_array(visitSpotPaths)
 							
