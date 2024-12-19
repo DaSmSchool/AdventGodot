@@ -50,6 +50,26 @@ func increment_path_list(pathArray: Array, dir: Vector2i) -> Array:
 	return assemble
 
 
+func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
+	var sameTargetArray: Array = []
+	
+	for spot: Array in masterArr:
+		if spot[0] == attemptAdd[0]:
+			sameTargetArray.append(spot)
+	
+	var smaller: bool = true
+	for similarSpot: Array in sameTargetArray:
+		if get_path_length_no_turn(similarSpot[1][0]) <= get_path_length_no_turn(attemptAdd[1][0]):
+				smaller = false
+				break
+	
+	if smaller:
+		for spot: Array in sameTargetArray:
+			masterArr.erase(spot)
+		masterArr.append(attemptAdd)
+	
+	return smaller
+
 func solve1(input: String) -> int:
 	var solution: int = 0
 	
@@ -102,32 +122,37 @@ func solve1(input: String) -> int:
 		if focusSpot[0] == finishPos:
 			for path: String in focusSpot[1]:
 				possiblePaths.get_or_add(path)
+			spotsToVisit.erase(focusSpot)
+			continue
 		
 		
 		for yOff: int in range(-1, 2):
 			for xOff: int in range(-1, 2):
 				var offsetSpot: Vector2i = Vector2i(focusSpot[0].x + xOff, focusSpot[0].y + yOff)
-				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]):
+				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]) and unvisitedSpots.has(offsetSpot):
 					var dirVec: Vector2i = Vector2i(xOff, yOff)
-					var visitSpotPaths: Array
+					var visitSpotPaths: Array = []
 					
-					if !unvisitedSpots.has(offsetSpot):
-						if (focusSpot[1][0]+".").length() < (visitedSpots[offsetSpot][0]).length():
-							visitedSpots[offsetSpot] = increment_path_list(focusSpot[1], dirVec)
-						elif (focusSpot[1][0]+".").length() == (visitedSpots[offsetSpot][0]).length():
-							visitedSpots[offsetSpot].append_array(increment_path_list(focusSpot[1], dirVec))
-						spotsToVisit.erase(focusSpot)
+					for checkSpot: Array in spotsToVisit:
+						if checkSpot[0] != focusSpot[0]: continue
+						if get_path_length_no_turn(focusSpot[1][0]+".") < get_path_length_no_turn(checkSpot[1][0]):
+							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
+							checkSpot[1] = visitSpotPaths
+						elif get_path_length_no_turn(focusSpot[1][0]+".") == get_path_length_no_turn(checkSpot[1][0]):
+							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
+							checkSpot[1].append_array(visitSpotPaths)
+							
 						continue
 					
-					visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
+					if visitSpotPaths.is_empty():
+						visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
 					
-					spotsToVisit.append([offsetSpot, visitSpotPaths])
+					add_if_lowest(spotsToVisit, [offsetSpot, visitSpotPaths])
+					#spotsToVisit.append([offsetSpot, visitSpotPaths])
 					
-					
-					if grid[offsetSpot.y][offsetSpot.x] == ".":
-						unvisitedSpots.erase(offsetSpot)
-						visitedSpots.get_or_add(offsetSpot, visitSpotPaths)
-				
+		
+		visitedSpots.get_or_add(focusSpot[0], focusSpot[1])
+		unvisitedSpots.erase(focusSpot[0])
 		spotsToVisit.erase(focusSpot)
 		spotsChecked += 1
 	
