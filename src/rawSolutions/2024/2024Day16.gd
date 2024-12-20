@@ -61,9 +61,14 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 	
 	var smaller: bool = true
 	for similarSpot: Array in sameTargetArray:
-		if get_path_length_no_turn(similarSpot[1][0]) <= get_path_length_no_turn(attemptAdd[1][0]):
-				smaller = false
-				break
+		if similarSpot[1][0] == attemptAdd[1][0]: continue
+		if get_path_length(similarSpot[1][0]) < get_path_length(attemptAdd[1][0]):
+			smaller = false
+			break
+		elif get_path_length(similarSpot[1][0]) == get_path_length(attemptAdd[1][0]):
+			smaller = false
+			similarSpot[1].append_array(attemptAdd[1])
+			break
 	
 	if smaller:
 		for spot: Array in sameTargetArray:
@@ -124,9 +129,9 @@ func solve1(input: String) -> int:
 		else: 
 			focusSpot = spotsToVisit.reduce(func(min, spot): return spot if get_path_length(spot[1][0]) < get_path_length(min[1][0]) else min)
 		
-		#print(spotsToVisit)
-		#print(focusSpot)
-		#print()
+		print(spotsToVisit)
+		print(focusSpot)
+		print()
 		
 		if focusSpot[0] == finishPos:
 			for path: String in focusSpot[1]:
@@ -153,13 +158,15 @@ func solve1(input: String) -> int:
 					
 					var visitSpotPaths: Array = []
 					
+					var focusLength: int = get_path_length(focusSpot[1][0]+dirString)
 					for checkSpotInd: int in spotsToVisit.size():
-						if spotsToVisit[checkSpotInd][0] != focusSpot[0]: continue
+						if spotsToVisit[checkSpotInd][0] != offsetSpot: continue
 						
-						if get_path_length(focusSpot[1][0]+dirString) < get_path_length(spotsToVisit[checkSpotInd][1][0]):
+						var checklength: int = get_path_length(spotsToVisit[checkSpotInd][1][0])
+						if focusLength < checklength:
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
 							spotsToVisit[checkSpotInd][1] = visitSpotPaths
-						elif get_path_length(focusSpot[1][0]+dirString) == get_path_length(spotsToVisit[checkSpotInd][1][0]):
+						elif focusLength == checklength:
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
 							spotsToVisit[checkSpotInd][1].append_array(visitSpotPaths)
 						print(spotsToVisit)
@@ -168,6 +175,8 @@ func solve1(input: String) -> int:
 					
 					if visitSpotPaths.is_empty():
 						visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
+					else:
+						continue
 					
 					add_if_lowest(spotsToVisit, [offsetSpot, visitSpotPaths])
 					#spotsToVisit.append([offsetSpot, visitSpotPaths])
