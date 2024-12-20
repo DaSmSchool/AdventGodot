@@ -59,16 +59,23 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 		if spot[0] == attemptAdd[0]:
 			sameTargetArray.append(spot)
 	
-	var smaller: bool = true
+	var smaller: bool = false
 	for similarSpot: Array in sameTargetArray:
 		if similarSpot[1][0] == attemptAdd[1][0]: continue
-		if get_path_length(similarSpot[1][0]) < get_path_length(attemptAdd[1][0]):
-			smaller = false
-			break
-		elif get_path_length(similarSpot[1][0]) == get_path_length(attemptAdd[1][0]):
-			smaller = false
-			similarSpot[1].append_array(attemptAdd[1])
-			break
+		
+		for focusPath: String in similarSpot[1]:
+			for path: String in attemptAdd[1]:
+				if path == focusPath:
+					smaller = true
+					break
+				
+				if get_path_length(focusPath) < get_path_length(path):
+					smaller = false
+
+				elif get_path_length(focusPath) == get_path_length(path):
+					smaller = false
+					similarSpot[1].append_array(attemptAdd[1])
+
 	
 	if smaller:
 		for spot: Array in sameTargetArray:
@@ -175,8 +182,6 @@ func solve1(input: String) -> int:
 					
 					if visitSpotPaths.is_empty():
 						visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
-					else:
-						continue
 					
 					add_if_lowest(spotsToVisit, [offsetSpot, visitSpotPaths])
 					#spotsToVisit.append([offsetSpot, visitSpotPaths])
