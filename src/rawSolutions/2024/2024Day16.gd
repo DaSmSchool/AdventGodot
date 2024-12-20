@@ -59,7 +59,7 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 		if spot[0] == attemptAdd[0]:
 			sameTargetArray.append(spot)
 	
-	var smaller: bool = false
+	var smaller: bool = true
 	for similarSpot: Array in sameTargetArray:
 		if similarSpot[1][0] == attemptAdd[1][0]: continue
 		
