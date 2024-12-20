@@ -63,10 +63,12 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 	for similarSpot: Array in sameTargetArray:
 		if similarSpot[1][0] == attemptAdd[1][0]: continue
 		
+		var extraPaths: Array = []
+		
 		for focusPath: String in similarSpot[1]:
 			for path: String in attemptAdd[1]:
 				if path == focusPath:
-					smaller = true
+					smaller = false
 					break
 				
 				if get_path_length(focusPath) < get_path_length(path):
@@ -74,7 +76,9 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 
 				elif get_path_length(focusPath) == get_path_length(path):
 					smaller = false
-					similarSpot[1].append_array(attemptAdd[1])
+					extraPaths.append_array(attemptAdd[1])
+		
+		similarSpot[1].append_array(extraPaths)
 
 	
 	if smaller:
