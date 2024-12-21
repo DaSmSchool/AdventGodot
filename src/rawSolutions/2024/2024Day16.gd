@@ -25,12 +25,13 @@ func get_path_length(path: String) -> int:
 	return pathLength
 
 
-func get_path_length_no_turn(path: String) -> int:
+func get_path_action_score(path: String) -> int:
 	var pathLength: int = 0
 	
 	for charInd: int in path.length():
 		if charInd == 0: pass
 		else:
+			if path[charInd] != path[charInd-1]: pathLength += 1
 			pathLength += 1
 	
 	return pathLength
@@ -59,6 +60,31 @@ func add_if_lowest(masterArr: Array, attemptAdd: Array) -> bool:
 		if spot[0] == attemptAdd[0]:
 			sameTargetArray.append(spot)
 	
+	var neighborSpots: Array = []
+	for yOff: int in range(-1, 2):
+		for xOff: int in range(-1, 2):
+			if abs(yOff) != abs(xOff):
+				var neighborPos: Vector2i = Vector2i(attemptAdd[0].x+xOff, attemptAdd[0].y+yOff)
+				for spot: Array in masterArr:
+					if spot[0] == neighborPos:
+						neighborSpots.append(spot)
+	
+	for neighborSpot: Array in neighborSpots:
+		if get_path_action_score(neighborSpot[1][0]) == get_path_action_score(attemptAdd[1][0]):
+			var neighborDir: Vector2i =  attemptAdd[0] - neighborSpot[0]
+			var dirString: = ""
+			if neighborDir == Vector2i.UP:
+				dirString += "^"
+			elif neighborDir == Vector2i.DOWN:
+				dirString += "v"
+			elif neighborDir == Vector2i.LEFT:
+				dirString += "<"
+			elif neighborDir == Vector2i.RIGHT:
+				dirString += ">"
+			
+			for path: String in neighborSpot[1]:
+				attemptAdd[1].append(path+dirString)
+			
 	var smaller: bool = true
 	for similarSpot: Array in sameTargetArray:
 		if similarSpot[1][0] == attemptAdd[1][0]: continue
@@ -140,9 +166,9 @@ func solve1(input: String) -> int:
 		else: 
 			focusSpot = spotsToVisit.reduce(func(min, spot): return spot if get_path_length(spot[1][0]) < get_path_length(min[1][0]) else min)
 		
-		print(spotsToVisit)
-		print(focusSpot)
-		print()
+		#print(spotsToVisit)
+		#print(focusSpot)
+		#print()
 		
 		if focusSpot[0] == finishPos:
 			for path: String in focusSpot[1]:
@@ -189,7 +215,6 @@ func solve1(input: String) -> int:
 					
 					add_if_lowest(spotsToVisit, [offsetSpot, visitSpotPaths])
 					#spotsToVisit.append([offsetSpot, visitSpotPaths])
-					
 		
 		visitedSpots.get_or_add(focusSpot[0], focusSpot[1])
 		unvisitedSpots.erase(focusSpot[0])
