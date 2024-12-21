@@ -314,6 +314,9 @@ func solve2(input: String) -> int:
 		else: 
 			focusSpot = spotsToVisit.reduce(func(min, spot): return spot if get_path_length(spot[1][0]) < get_path_length(min[1][0]) else min)
 		
+		if focusSpot[0] == Vector2i(3, 4):
+			pass
+		
 		#print(spotsToVisit)
 		#print(focusSpot)
 		#print()
@@ -330,36 +333,58 @@ func solve2(input: String) -> int:
 			for xOff: int in range(-1, 2):
 				var offsetSpot: Vector2i = Vector2i(focusSpot[0].x + xOff, focusSpot[0].y + yOff)
 				# if adjacent, is a travelable spot, and not visited yet
-				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]) and unvisitedSpots.has(offsetSpot):
+				if abs(yOff) != abs(xOff) and ".E".contains(grid[offsetSpot.y][offsetSpot.x]):
 					var dirVec: Vector2i = Vector2i(xOff, yOff)
-					
-					var dirString: String = dir_to_string(dirVec)
-					
-					var visitSpotPaths: Array = []
-					
-					var focusLength: int = get_path_length(focusSpot[1][0]+dirString)
-					# check every queued spot if there is another identical spot
-					for checkSpotInd: int in spotsToVisit.size():
-						if spotsToVisit[checkSpotInd][0] != offsetSpot: continue
+					if unvisitedSpots.has(offsetSpot):
 						
-						var checklength: int = get_path_length(spotsToVisit[checkSpotInd][1][0])
-						if focusLength < checklength:
+						var dirString: String = dir_to_string(dirVec)
+						
+						var visitSpotPaths: Array = []
+						
+						var focusLength: int = get_path_length(focusSpot[1][0]+dirString)
+						# check every queued spot if there is another identical spot
+						for checkSpotInd: int in spotsToVisit.size():
+							if spotsToVisit[checkSpotInd][0] != offsetSpot: continue
+							
+							var checklength: int = get_path_length(spotsToVisit[checkSpotInd][1][0])
+							if focusLength < checklength:
+								visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
+								spotsToVisit[checkSpotInd][1] = visitSpotPaths
+							elif focusLength == checklength:
+								visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
+								spotsToVisit[checkSpotInd][1].append_array(visitSpotPaths)
+							#print(spotsToVisit)
+							continue
+						
+						# if visitSpotPaths wasn't defined earlier, do so now
+						if visitSpotPaths.is_empty():
 							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
-							spotsToVisit[checkSpotInd][1] = visitSpotPaths
-						elif focusLength == checklength:
-							visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
-							spotsToVisit[checkSpotInd][1].append_array(visitSpotPaths)
-						#print(spotsToVisit)
-						continue
+						
+						
+						add_if_lowest(spotsToVisit, [offsetSpot, visitSpotPaths])
+						#spotsToVisit.append([offsetSpot, visitSpotPaths])
 					
-					# if visitSpotPaths wasn't defined earlier, do so now
-					if visitSpotPaths.is_empty():
-						visitSpotPaths = increment_path_list(focusSpot[1], dirVec)
-					
-					
-					add_if_lowest(spotsToVisit, [offsetSpot, visitSpotPaths])
-					#spotsToVisit.append([offsetSpot, visitSpotPaths])
-		
+					# if encountered a visited spot, check if the spot doesn't have connecting paths
+					elif visitedSpots.has(offsetSpot):
+						var diagVec: Vector2i = Vector2i(1, 1)
+						for visYOff: int in range(-1, 2):
+							for visXOff: int in range(-1, 2):
+								if abs(visYOff) != abs(visXOff):
+									var offHighDir: Vector2i = Vector2i(visXOff, visYOff)
+									var offHighSpot: Vector2i = offsetSpot + offHighDir
+									if offHighSpot == focusSpot[0]: continue
+									if !".E".contains(grid[offHighSpot.y][offHighSpot.x]): continue
+									
+									for checkSpot: Array in spotsToVisit:
+										var csLen: int = get_path_length(checkSpot[1][0])
+										if checkSpot[0] != offHighSpot: continue
+										if abs(offHighSpot-focusSpot[0]) == diagVec:
+											if get_path_length(focusSpot[1][0])+1002 != csLen: continue
+										else:
+											if get_path_length(focusSpot[1][0])+2 != csLen: continue
+										checkSpot[1].append_array(
+											increment_path_list(increment_path_list(focusSpot[1], dirVec), offHighDir)
+											)
 		# clearing current node from unvisiteds and prep for next node
 		visitedSpots.get_or_add(focusSpot[0], focusSpot[1])
 		unvisitedSpots.erase(focusSpot[0])
@@ -372,15 +397,17 @@ func solve2(input: String) -> int:
 	for path: String in possiblePaths:
 		#print(path)
 		var pathScore: int = get_path_length(path)
-		#print(pathScore)
+		print(pathScore)
 		pathScores.append(pathScore)
 		paths.append(path)
 	
 	var pathMin: int = pathScores.min()
+	print(pathMin)
 	
 	for scoreInd: int in pathScores.size():
 		if pathScores[scoreInd] == pathMin:
 			bestPaths.append(paths[scoreInd])
+	print("BP SIZE: " + str(bestPaths.size()))
 	
 	var spotsVisitedInBestPaths: Dictionary = {}
 	for path: String in bestPaths:
@@ -389,7 +416,7 @@ func solve2(input: String) -> int:
 			pos += string_to_dir(char)
 			spotsVisitedInBestPaths.get_or_add(pos)
 	
-	print(spotsVisitedInBestPaths)
+	#print(spotsVisitedInBestPaths)
 	
 	solution = spotsVisitedInBestPaths.keys().size()
 	
