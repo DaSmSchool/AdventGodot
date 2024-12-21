@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://wxuoee08fu86"]
+[gd_scene load_steps=35 format=3 uid="uid://wxuoee08fu86"]
 
 [ext_resource type="Script" path="res://src/run_solutions.gd" id="1_2trj4"]
 [ext_resource type="Script" path="res://src/rawSolutions/2020/2020Day1.gd" id="1_vy5lq"]
@@ -33,6 +33,7 @@
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day14.gd" id="31_c8ttn"]
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day15.gd" id="32_ij5ig"]
 [ext_resource type="Script" path="res://src/rawSolutions/2024/2024Day16.gd" id="33_mep84"]
+[ext_resource type="PackedScene" uid="uid://dtns1c004qd8j" path="res://src/misc/day_16_help.tscn" id="34_o8viq"]
 
 [node name="AdventSolutions" type="Node"]
 script = ExtResource("1_2trj4")
@@ -139,3 +140,5 @@ script = ExtResource("32_ij5ig")
 
 [node name="Day16" type="Node" parent="2024"]
 script = ExtResource("33_mep84")
+
+[node name="Day16Help" parent="2024" instance=ExtResource("34_o8viq")]
