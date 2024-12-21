@@ -5,8 +5,9 @@ var file: String
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	file = FileAccess.get_file_as_string("res://input/2024/CompareSpots.txt")
-	check_stuff(file)
+	#file = FileAccess.get_file_as_string("res://input/2024/CompareSpots.txt")
+	#check_stuff(file)
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
