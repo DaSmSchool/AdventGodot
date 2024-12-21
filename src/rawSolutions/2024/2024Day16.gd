@@ -1,10 +1,17 @@
 extends Node
 
-# This day took me about 4 days to complete. What did I do and learn?
+# This day took me about 5 days to complete. What did I do and learn?
 # I learned Dijkstra's algorithm, it seems pretty cool
 # I implemented Dijkstras, sloppily tried to fit the path tracking system required for part 2 while working on part 1
 # I ended up messing up that code once I refactored the code to actually implement dijkstra's, leaving disfunctional code
-# I never cleaned up that code because "what if it's actually important since the path length counting "
+# I never cleaned up that code because "what if it's actually important since the path length counting is a part of it and will break if i remove it"
+# I kept adding code on top of that broken code, making this algo really hard to read
+# ended up keeping the old broken alg that doesn't keep all paths properly tracked in solve1
+
+# This is by far, the worst piece of code i have ever written in my life (so far!)
+# Please do not use this code legitemately
+# I only made this for the answer, and this has dozens of ways i can optimize it
+# I won't though, I'm way too tired of this problem to try to mess with it any more, especially since i have the damn answer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
