@@ -11,8 +11,8 @@ func run_solution(year: int, day: int) -> void:
 	
 	var microTime: int
 	var postMicroTime: int
-	var p1Sol: int
-	var p2Sol: int
+	var p1Sol
+	var p2Sol
 	var solNode = get_node("%d" % focusYear).get_node("Day%d" % focusDay)
 	if solNode == null:
 		Helper.print_fail("NODE FOR YEAR%d DAY%d NOT FOUND" % [year, day])
