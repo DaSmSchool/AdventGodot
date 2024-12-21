@@ -9,7 +9,7 @@ extends Node
 # ended up keeping the old broken alg that doesn't keep all paths properly tracked in solve1
 
 # This is by far, the worst piece of code i have ever written in my life (so far!)
-# Please do not use this code legitemately
+# Please do not use this code legitimately
 # I only made this for the answer, and this has dozens of ways i can optimize it
 # I won't though, I'm way too tired of this problem to try to mess with it any more, especially since i have the damn answer
 
