@@ -203,9 +203,7 @@ func get_lowest_reg_num(reg: Dictionary) -> int:
 			var dupDict: Dictionary = reg.duplicate(true)
 			var focusReg: String = "reg"
 			if currOperand >= 0 and currOperand <= 3:
-				dupDict["regB"] = currOperand
-				dupDict["currentInstr"] -= 2
-				return get_lowest_reg_num(dupDict)
+				if reg["regB"] != currOperand: return -1
 			elif currOperand == 4:
 				focusReg += "A"
 			elif currOperand == 5:
@@ -218,7 +216,9 @@ func get_lowest_reg_num(reg: Dictionary) -> int:
 			#print(reg[focusReg])
 			#print(reg[focusReg] % 8)
 			
-			#if reg["regB"] != reg[focusReg] % 8: return -1
+			#if reg["regB"] != reg[focusReg] % 8:
+				#print("Go back!")
+				#return -1
 			
 			#print(reg["regB"])
 			#print(reg[focusReg])
@@ -230,12 +230,7 @@ func get_lowest_reg_num(reg: Dictionary) -> int:
 				dupDict["currentInstr"] -= 2
 				var bstResult: int = get_lowest_reg_num(dupDict)
 				if bstResult != -1:
-					aOverride = bstResult
-					var trySolve: int = solve1(inp)
-					var listRep: int = list_to_string(instrList).to_int()
-					
-					if trySolve == listRep:
-						return bstResult
+					return bstResult
 		
 		3:
 			var dupDict: Dictionary = reg.duplicate(true)
