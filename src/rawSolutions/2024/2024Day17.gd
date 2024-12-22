@@ -29,19 +29,19 @@ func reset_computer(input: String) -> void:
 
 
 func print_computer() -> void:
-	print("Register A: " + str(registerA))
-	print("Register B: " + str(registerB))
-	print("Register C: " + str(registerC))
-	
-	if instrPointer < instrList.size():
-		print("Current opcode: " + str(instrList[instrPointer]))
-	else:
-		print("Current opcode: NULL")
-		
-	if instrPointer < instrList.size()-1:
-		print("Current operand: " + str(instrList[instrPointer+1]))
-	else:
-		print("Current operand: NULL")
+	#print("Register A: " + str(registerA))
+	#print("Register B: " + str(registerB))
+	#print("Register C: " + str(registerC))
+	#
+	#if instrPointer < instrList.size():
+		#print("Current opcode: " + str(instrList[instrPointer]))
+	#else:
+		#print("Current opcode: NULL")
+		#
+	#if instrPointer < instrList.size()-1:
+		#print("Current operand: " + str(instrList[instrPointer+1]))
+	#else:
+		#print("Current operand: NULL")
 
 	print("Output: " + output)
 
@@ -146,6 +146,7 @@ var registerC: int = 0
 var aOverride: int = -1
 var output: String = ""
 var inp: String
+var triedAs: Dictionary = {}
 
 func solve1(input: String) -> int:
 	var solution: int = 0
@@ -160,11 +161,11 @@ func solve1(input: String) -> int:
 		var opMethod: Callable = Callable.create(self, "op"+str(instrList[instrPointer]))
 		opMethod.call(instrList[instrPointer+1])
 	
-	#print_computer()
+	print_computer()
 	
 	var joinOutput: String = joined_output(output)
 	
-	#print("Real Solution: " + output)
+	print("Real Solution: " + output)
 	solution = joined_output(output).to_int()
 	
 	return solution
@@ -211,26 +212,39 @@ func get_lowest_reg_num(reg: Dictionary) -> int:
 			elif currOperand == 6:
 				focusReg += "C"
 			
-			#print()
-			#print(reg["regB"])
-			#print(reg[focusReg])
-			#print(reg[focusReg] % 8)
-			
-			#if reg["regB"] != reg[focusReg] % 8:
+			if reg["regB"] != reg[focusReg] % 8:
 				#print("Go back!")
-				#return -1
+				return -1
+			else:
+				pass
+				#print("!")
 			
-			#print(reg["regB"])
-			#print(reg[focusReg])
-			#print(reg[focusReg] % 8)
-			
-			for i: int in range(8):
+			var cOff: int = 0
+			while cOff != 9:
 				dupDict = reg.duplicate(true)
-				dupDict["regB"] = i
+				dupDict["regB"] = dupDict["regC"] + cOff
 				dupDict["currentInstr"] -= 2
 				var bstResult: int = get_lowest_reg_num(dupDict)
 				if bstResult != -1:
-					return bstResult
+					if !triedAs.has(bstResult):
+						triedAs.get_or_add(bstResult)
+						aOverride = bstResult
+						if solve1(inp) == list_to_string(instrList).to_int():
+							return bstResult
+				
+				if cOff != 0:
+					dupDict = reg.duplicate(true)
+					dupDict["regB"] = dupDict["regC"] - cOff
+					dupDict["currentInstr"] -= 2
+					bstResult = get_lowest_reg_num(dupDict)
+					if bstResult != -1:
+						if !triedAs.has(bstResult):
+							triedAs.get_or_add(bstResult)
+							aOverride = bstResult
+							if solve1(inp) == list_to_string(instrList).to_int():
+								return bstResult
+							
+				cOff += 1
 		
 		3:
 			var dupDict: Dictionary = reg.duplicate(true)
@@ -243,8 +257,9 @@ func get_lowest_reg_num(reg: Dictionary) -> int:
 			dupDict["regB"] = dupDict["regB"] ^ dupDict["regC"]
 			dupDict["currentInstr"] -= 2
 			return get_lowest_reg_num(dupDict)
+			
 		5:
-			if reg["regA"] % 8 == reg["output"].back():
+			if reg["regB"] % 8 == reg["output"].back():
 				reg["output"].pop_back()
 				var dupDict: Dictionary = reg.duplicate(true)
 				if reg["output"].size() == 0:
@@ -252,7 +267,8 @@ func get_lowest_reg_num(reg: Dictionary) -> int:
 				
 				
 				dupDict["currentInstr"] -= 2
-				return get_lowest_reg_num(dupDict)
+				var tryGet: int = get_lowest_reg_num(dupDict)
+				if tryGet != -1: return tryGet 
 		6:
 			#print("BRANCH")
 			for i in range(8):
@@ -295,5 +311,7 @@ func solve2(input: String) -> int:
 	}
 	
 	solution = get_lowest_reg_num(regInfo)
+	
+	print(triedAs)
 	
 	return solution
