@@ -12,6 +12,7 @@ func _process(delta: float) -> void:
 
 
 func reset_computer(input: String) -> void:
+	instrPointer = 0
 	registerA = 0
 	registerB = 0
 	registerC = 0
@@ -38,7 +39,7 @@ func print_computer() -> void:
 		print("Current opcode: NULL")
 		
 	if instrPointer < instrList.size()-1:
-		print("Current opcode: " + str(instrList[instrPointer+1]))
+		print("Current operand: " + str(instrList[instrPointer+1]))
 	else:
 		print("Current operand: NULL")
 
@@ -53,6 +54,13 @@ func joined_output(outputString: String) -> String:
 		assemble += output
 		#print(assemble)
 	
+	return assemble
+
+
+func list_to_string(arr: Array) -> String:
+	var assemble: String = ""
+	for el: int in arr:
+		assemble += str(el)
 	return assemble
 
 
@@ -135,30 +143,162 @@ var instrList: Array = []
 var registerA: int = 0
 var registerB: int = 0
 var registerC: int = 0
+var aOverride: int = -1
 var output: String = ""
-
+var inp: String
 
 func solve1(input: String) -> int:
 	var solution: int = 0
+	inp = input
 	reset_computer(input)
 	
+	if aOverride != -1:
+		registerA = aOverride
+	
 	while instrPointer < instrList.size():
-		print_computer()
+		#print_computer()
 		var opMethod: Callable = Callable.create(self, "op"+str(instrList[instrPointer]))
 		opMethod.call(instrList[instrPointer+1])
 	
-	print_computer()
+	#print_computer()
 	
 	var joinOutput: String = joined_output(output)
 	
-	print("Real Solution: " + output)
+	#print("Real Solution: " + output)
 	solution = joined_output(output).to_int()
 	
 	return solution
 
 
+func get_lowest_reg_num(reg: Dictionary) -> int:
+	#print(reg)
+	if reg["currentInstr"] == reg["jumpFrom"] - 2:
+		if reg["goingToWin"] == true: return reg["regA"]
+		var dupDict: Dictionary = reg.duplicate(true)
+		dupDict["currentInstr"] = reg["jumpTo"]
+		return get_lowest_reg_num(dupDict)
+	
+	var currOpcode: int = instrList[reg["currentInstr"]]
+	var currOperand: int = instrList[reg["currentInstr"]+1]
+	
+	
+	
+	match currOpcode:
+		0:
+			#print("BRANCH")
+			for i in range(8):
+				#print(i)
+				var dupDict: Dictionary = reg.duplicate(true)
+				var baseResult: int = reg["regA"] * pow(2, combo(currOperand))
+				dupDict["regA"] = baseResult+i
+				dupDict["currentInstr"] -= 2
+				var depthResult = get_lowest_reg_num(dupDict)
+				if depthResult != -1: return depthResult
+		1:
+			var dupDict: Dictionary = reg.duplicate(true)
+			dupDict["regB"] = dupDict["regB"] ^ currOperand
+			dupDict["currentInstr"] -= 2
+			return get_lowest_reg_num(dupDict)
+		2:
+			var dupDict: Dictionary = reg.duplicate(true)
+			var focusReg: String = "reg"
+			if currOperand >= 0 and currOperand <= 3:
+				dupDict["regB"] = currOperand
+				dupDict["currentInstr"] -= 2
+				return get_lowest_reg_num(dupDict)
+			elif currOperand == 4:
+				focusReg += "A"
+			elif currOperand == 5:
+				focusReg += "B"
+			elif currOperand == 6:
+				focusReg += "C"
+			
+			#print()
+			#print(reg["regB"])
+			#print(reg[focusReg])
+			#print(reg[focusReg] % 8)
+			
+			#if reg["regB"] != reg[focusReg] % 8: return -1
+			
+			#print(reg["regB"])
+			#print(reg[focusReg])
+			#print(reg[focusReg] % 8)
+			
+			for i: int in range(8):
+				dupDict = reg.duplicate(true)
+				dupDict["regB"] = i
+				dupDict["currentInstr"] -= 2
+				var bstResult: int = get_lowest_reg_num(dupDict)
+				if bstResult != -1:
+					aOverride = bstResult
+					var trySolve: int = solve1(inp)
+					var listRep: int = list_to_string(instrList).to_int()
+					
+					if trySolve == listRep:
+						return bstResult
+		
+		3:
+			var dupDict: Dictionary = reg.duplicate(true)
+			dupDict["jumpFrom"] = currOperand
+			dupDict["jumpTo"] = reg["currentInstr"]
+			dupDict["currentInstr"] -= 2
+			return get_lowest_reg_num(dupDict)
+		4:
+			var dupDict: Dictionary = reg.duplicate(true)
+			dupDict["regB"] = dupDict["regB"] ^ dupDict["regC"]
+			dupDict["currentInstr"] -= 2
+			return get_lowest_reg_num(dupDict)
+		5:
+			if reg["regA"] % 8 == reg["output"].back():
+				reg["output"].pop_back()
+				var dupDict: Dictionary = reg.duplicate(true)
+				if reg["output"].size() == 0:
+					dupDict["goingToWin"] = true
+				
+				
+				dupDict["currentInstr"] -= 2
+				return get_lowest_reg_num(dupDict)
+		6:
+			#print("BRANCH")
+			for i in range(8):
+				#print(i)
+				var dupDict: Dictionary = reg.duplicate(true)
+				var baseResult: int = reg["regA"] * pow(2, combo(currOperand))
+				dupDict["regB"] = baseResult+i
+				dupDict["currentInstr"] -= 2
+				var depthResult = get_lowest_reg_num(dupDict)
+				if depthResult != -1: return depthResult
+		7:
+			#print("BRANCH")
+			for i in range(8):
+				#print(i)
+				var dupDict: Dictionary = reg.duplicate(true)
+				var baseResult: int = reg["regA"] * pow(2, combo(currOperand))
+				dupDict["regC"] = baseResult+i
+				dupDict["currentInstr"] -= 2
+				var depthResult = get_lowest_reg_num(dupDict)
+				if depthResult != -1: return depthResult
+	#print("FAIL!")
+	
+	#print()
+	return -1
+
+
 func solve2(input: String) -> int:
 	var solution: int = 0
 	reset_computer(input)
+	
+	var regInfo: Dictionary = {
+		"regA" : 0,
+		"regB" : 0,
+		"regC" : 0,
+		"currentInstr" : instrList.size()-2,
+		"output" : instrList,
+		"jumpFrom" : 0,
+		"jumpTo": instrList.size()-2,
+		"goingToWin" : false
+	}
+	
+	solution = get_lowest_reg_num(regInfo)
 	
 	return solution
