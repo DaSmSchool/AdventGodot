@@ -87,7 +87,7 @@ func solve1(input: String) -> int:
 	
 	return solution
 
-# binary search my beloved
+
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
@@ -98,6 +98,7 @@ func solve2(input: String) -> int:
 		if line == "": continue
 		corruptPoints.append(Vector2i(line.split(",")[0].to_int(), line.split(",")[1].to_int()))
 	
+	# binary search my beloved
 	var corruptIndMin: int = 0
 	var corruptIndMax: int = corruptPoints.size()
 	var corruptInd: int = (corruptIndMax + corruptIndMin)/2
