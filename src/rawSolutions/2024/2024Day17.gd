@@ -1,5 +1,12 @@
 extends Solution
 
+# This is a copy of my teacher's implementation of this algorithm.
+# I resorted to doing this after trying to make a backwards DFS approach to the algorithm, which was thwarted by opcode 2.
+# I feel that I have analyzed the problem enough to understand why my solution doesn't work, and why the second solution does.
+# In the time spent studying for my first solution, I gathered the same information that my teacher did, but I had a different end goal in mind when using that information.
+# MY decision to try to make a copy implementation is also in part because I am salty that I spent more time than I should have figuring out how to make the "inverse" of opcode 2.
+# I feel like I have learned the amount that I could have learned from this problem, and I want to move on.
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -29,19 +36,19 @@ func reset_computer(input: String) -> void:
 
 
 func print_computer() -> void:
-	#print("Register A: " + str(registerA))
-	#print("Register B: " + str(registerB))
-	#print("Register C: " + str(registerC))
-	#
-	#if instrPointer < instrList.size():
-		#print("Current opcode: " + str(instrList[instrPointer]))
-	#else:
-		#print("Current opcode: NULL")
-		#
-	#if instrPointer < instrList.size()-1:
-		#print("Current operand: " + str(instrList[instrPointer+1]))
-	#else:
-		#print("Current operand: NULL")
+	print("Register A: " + str(registerA))
+	print("Register B: " + str(registerB))
+	print("Register C: " + str(registerC))
+	
+	if instrPointer < instrList.size():
+		print("Current opcode: " + str(instrList[instrPointer]))
+	else:
+		print("Current opcode: NULL")
+		
+	if instrPointer < instrList.size()-1:
+		print("Current operand: " + str(instrList[instrPointer+1]))
+	else:
+		print("Current operand: NULL")
 
 	print("Output: " + output)
 
@@ -161,7 +168,7 @@ func solve1(input: String) -> int:
 		var opMethod: Callable = Callable.create(self, "op"+str(instrList[instrPointer]))
 		opMethod.call(instrList[instrPointer+1])
 	
-	print_computer()
+	#print_computer()
 	
 	var joinOutput: String = joined_output(output)
 	
@@ -170,7 +177,7 @@ func solve1(input: String) -> int:
 	
 	return solution
 
-
+# overenginnered solution btw, i would LOVE to see someone implement opcode 2 successfully
 func get_lowest_reg_num(reg: Dictionary) -> int:
 	#print(reg)
 	if reg["currentInstr"] == reg["jumpFrom"] - 2:
@@ -299,19 +306,38 @@ func solve2(input: String) -> int:
 	var solution: int = 0
 	reset_computer(input)
 	
-	var regInfo: Dictionary = {
-		"regA" : 0,
-		"regB" : 0,
-		"regC" : 0,
-		"currentInstr" : instrList.size()-2,
-		"output" : instrList,
-		"jumpFrom" : 0,
-		"jumpTo": instrList.size()-2,
-		"goingToWin" : false
-	}
+	# overengineered solution!
+	#solution = get_lowest_reg_num(regInfo)
 	
-	solution = get_lowest_reg_num(regInfo)
+	var valid: Array[int] = []
+	var lastValid: Array[int] = []
 	
-	print(triedAs)
+	# for every instruction in the instr list
+	for instrInd: int in range(1, instrList.size()+1):
+		print()
+		print(valid)
+		print(lastValid)
+		print()
+		# first time set
+		if instrInd == 1:
+			lastValid = [0]
+		else:
+			lastValid = valid
+		valid = []
+		# go iterate through all last short solutions
+		for num: int in lastValid:
+			for offset: int in range(8):
+				# get the new version of register 8 to try
+				var regA: int = 8*num+offset
+				aOverride = regA
+				var result: int = solve1(inp)
+				#print("LIST="+list_to_string(instrList.slice(instrList.size()-instrInd, instrList.size()+1)))
+				#print("RESULT="+str(result))
+				#print("REGA="+str(regA))
+				# if the returned value from testing this A register returns an exact copy of the last focused instruction's value, add to the list
+				if result == list_to_string(instrList.slice(instrList.size()-instrInd, instrList.size()+1)).to_int():
+					valid.append(regA)
+	
+	solution = valid.min()
 	
 	return solution
