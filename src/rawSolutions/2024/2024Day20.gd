@@ -166,8 +166,8 @@ func solve2(input: String) -> int:
 		
 		
 		
-		print("Checking Path Index: " + str(pathIndeces[currPos]))
-		print("Path Percent: " + str(float(pathIndeces[currPos])/pathIndSize))
+		#print("Checking Path Index: " + str(pathIndeces[currPos]))
+		#print("Path Percent: " + str(float(pathIndeces[currPos])/pathIndSize))
 		check_cheats_p2(currPos, 20, grid, pathIndeces, cheatList)
 		
 		var nextPoint: Vector2i
