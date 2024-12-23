@@ -29,6 +29,8 @@ func dijkstraP1(grid: Array, unvisited: Array) -> int:
 			if unvisited[pointInd][1] < focusPoint[1]:
 				focusPoint = unvisited[pointInd]
 		
+		if focusPoint[1] == INF: return -1
+		
 		if focusPoint[0] == winningPoint:
 			return focusPoint[1]
 		
@@ -85,8 +87,55 @@ func solve1(input: String) -> int:
 	
 	return solution
 
-
+# binary search my beloved
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
+	var corruptPoints: Array[Vector2i] = []
+	
+	var inputSplit: PackedStringArray = input.split("\n")
+	for line: String in inputSplit:
+		if line == "": continue
+		corruptPoints.append(Vector2i(line.split(",")[0].to_int(), line.split(",")[1].to_int()))
+	
+	var corruptIndMin: int = 0
+	var corruptIndMax: int = corruptPoints.size()
+	var corruptInd: int = (corruptIndMax + corruptIndMin)/2
+	while true:
+		#print()
+		#print(corruptInd)
+		var selectPoints: Array[Vector2i] = corruptPoints.slice(0, corruptInd)
+		var grid: Array = []
+		var unvisitedPoints: Array = []
+		for rowInd: int in range(71):
+			var rowAssemble: PackedStringArray = []
+			
+			for colInd: int in range(71):
+				var checkPoint: Vector2i = Vector2i(colInd, rowInd)
+				if selectPoints.has(checkPoint):
+					rowAssemble.append("#")
+				else:
+					rowAssemble.append(".")
+					unvisitedPoints.append([checkPoint, INF])
+			
+			grid.append(rowAssemble)
+		
+		var subSolution: int = dijkstraP1(grid, unvisitedPoints)
+		#print("SOL: " + str(subSolution))
+		#print(str(corruptPoints[corruptInd].x) + "," + str(corruptPoints[corruptInd].y))
+		
+		if subSolution == -1:
+			corruptIndMax = corruptInd
+		else:
+			corruptIndMin = corruptInd
+		corruptInd = (corruptIndMax + corruptIndMin)/2
+		
+		if abs(corruptIndMax-corruptIndMin) < 2:
+			solution = corruptInd
+			print()
+			print(corruptInd)
+			print("SOL: " + str(subSolution))
+			print(str(corruptPoints[corruptInd].x) + "," + str(corruptPoints[corruptInd].y))
+			break
+		
 	return solution
