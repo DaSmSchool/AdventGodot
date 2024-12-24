@@ -1,6 +1,8 @@
 extends Solution
 
 # dictionary of baked keypad switching value paths
+# This is manually typed, so it's probably going to have mistakes, and it will not be guaranteed to work on your input!
+# I won't manually fix it more either. 
 var move: Dictionary = {
 	# in the key: first character is from, second character is to
 	# in the value: translated movement path
@@ -147,7 +149,7 @@ var move: Dictionary = {
 	"v>":">",
 	
 	">A":"^",
-	">^":"^<",
+	">^":"<^",
 	"><":"<<",
 	">v":"<"
 }
