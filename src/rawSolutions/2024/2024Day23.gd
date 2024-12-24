@@ -12,6 +12,7 @@ func _process(delta: float) -> void:
 
 
 func solve1(input: String) -> int:
+	return 0
 	var solution: int = 0
 	
 	var inputSplit: PackedStringArray = input.split("\n")
@@ -62,6 +63,25 @@ func solve1(input: String) -> int:
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
+	var inputSplit: PackedStringArray = input.split("\n")
 	
+	var computers: Dictionary = {}
+	for line: String in inputSplit:
+		if line == "": continue
+		var lineComputers: PackedStringArray = line.split("-")
+		
+		if computers.get(lineComputers[0], []) == []:
+			computers.get_or_add(lineComputers[0], [lineComputers[1]])
+		else:
+			computers[lineComputers[0]].append(lineComputers[1])
+			
+		if computers.get(lineComputers[1], []) == []:
+			computers.get_or_add(lineComputers[1], [lineComputers[0]])
+		else:
+			computers[lineComputers[1]].append(lineComputers[0])
+	
+	for computer: String in computers:
+		print(computer + ": " + str(computers[computer]))
+		await get_tree().create_timer(.001).timeout
 	
 	return solution
