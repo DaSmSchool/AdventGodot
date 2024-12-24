@@ -195,6 +195,7 @@ func get_complexity(code: String, robots: int) -> int:
 	print()
 	return focusString.length() * code.substr(0, 3).to_int()
 
+
 func solve1(input: String) -> int:
 	var solution: int = 0
 	
@@ -214,9 +215,53 @@ func solve1(input: String) -> int:
 	return solution
 
 
+func get_complexity_rec(code: String, robots: int, cache: Dictionary) -> int:
+	#print("R: " + str(robots) + " LEN: " + str(code.length()) + " \"" + code + "\"")
+	if robots == 0:
+		return code.length()
+	if cache.has([code, robots]):
+		return cache[[code, robots]]
+	
+	var complexity: int = 0
+	
+	var differences: PackedStringArray = []
+	for charInd: int in range(-1, code.length()-1):
+		if charInd == -1:
+			differences.append("A" + code[0])
+		else:
+			#print(focusString.substr(charInd, 2))
+			differences.append(code.substr(charInd, 2))
+			
+	#print(differences)
+	for diff: String in differences:
+		var result: int = get_complexity_rec(get_movement(diff[0], diff[1]), robots-1, cache)
+		complexity += result
+	cache.get_or_add([code, robots], complexity)
+		
+	
+	return complexity
+
+
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
+	var inputSplit: PackedStringArray = input.split("\n")
 	
+	var rawCodes: PackedStringArray = []
+	for line: String in inputSplit:
+		if line == "": continue
+		rawCodes.append(line)
+	
+	var complexities: int = 0
+	var compCache: Dictionary = {}
+	for code: String in rawCodes:
+		var testVal: int = get_complexity_rec(code, 26, compCache)
+		var multVal: int = code.substr(0, 3).to_int()
+		#print()
+		#print(testVal)
+		#print(multVal)
+		complexities += testVal * multVal
+	
+	solution = complexities
 	
 	return solution
