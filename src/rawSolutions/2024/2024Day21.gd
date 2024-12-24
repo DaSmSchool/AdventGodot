@@ -6,13 +6,13 @@ var move: Dictionary = {
 	# in the value: translated movement path
 	"A0":"<",
 	"A1":"^<<",
-	"A2":"^<",
+	"A2":"<^",
 	"A3":"^",
-	"A4":"^^<<",
-	"A5":"^^<",
+	"A4":"<<^^",
+	"A5":"<^^",
 	"A6":"^^",
 	"A7":"^^^<<",
-	"A8":"^^^<",
+	"A8":"<^^^",
 	"A9":"^^^",
 	
 	"0A":">",
@@ -37,7 +37,7 @@ var move: Dictionary = {
 	"18":"^^>",
 	"19":"^^>>",
 	
-	"2A":">v",
+	"2A":"v>",
 	"20":"v",
 	"21":"<",
 	"23":">",
@@ -52,18 +52,18 @@ var move: Dictionary = {
 	"30":"v<",
 	"31":"<<",
 	"32":"<",
-	"34":"<<^",
+	"34":"^<<",
 	"35":"<^",
 	"36":"^",
-	"37":"^^<<",
-	"38":"^^<",
+	"37":"<<^^",
+	"38":"<^^",
 	"39":"^^",
 	
 	"4A":">>vv",
 	"40":">vv",
 	"41":"v",
-	"42":"v>",
-	"43":"v>>",
+	"42":">v",
+	"43":">>v",
 	"45":">",
 	"46":">>",
 	"47":"^",
@@ -71,11 +71,11 @@ var move: Dictionary = {
 	"49":"^>>",
 	
 	
-	"5A":">vv",
+	"5A":"vv>",
 	"50":"vv",
 	"51":"v<",
 	"52":"v",
-	"53":"v>",
+	"53":">v",
 	"54":"<",
 	"56":">",
 	"57":"^<",
@@ -108,23 +108,23 @@ var move: Dictionary = {
 	"80":"vvv",
 	"81":"vv<",
 	"82":"vv",
-	"83":"vv>",
+	"83":">vv",
 	"84":"v<",
 	"85":"v",
-	"86":"v>",
+	"86":">v",
 	"87":"<",
 	"89":">",
 	
-	"9A":">vvv",
-	"90":"vvv",
-	"91":"vv<",
-	"92":"vv",
-	"93":"vv>",
-	"94":"v<",
-	"95":"v",
-	"96":"v>",
-	"97":"<",
-	"98":">",
+	"9A":"vvv",
+	"90":"vvv<",
+	"91":"vv<<",
+	"92":"vv<",
+	"93":"vv",
+	"94":"v<<",
+	"95":"v<",
+	"96":"v",
+	"97":"<<",
+	"98":"<",
 	
 	"A^":"<",
 	"A<":"v<<",
@@ -134,7 +134,7 @@ var move: Dictionary = {
 	"^A":">",
 	"^<":"v<",
 	"^v":"v",
-	"^>":"v>",
+	"^>":">v",
 	
 	"<A":">>^",
 	"<^":">^",
@@ -147,10 +147,15 @@ var move: Dictionary = {
 	"v>":">",
 	
 	">A":"^",
-	">^":"<^",
+	">^":"^<",
 	"><":"<<",
 	">v":"<"
 }
+
+
+func get_movement(from: String, to: String) -> String:
+	if from == to: return "A"
+	return move[from+to] + "A"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -162,15 +167,49 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+func get_complexity(code: String, robots: int) -> int:
+	var complexity: int = 0
+	
+	var focusString: String = code
+	
+	for i: int in range(robots):
+		var assemble: String = ""
+		var differences: PackedStringArray = []
+		for charInd: int in range(-1, focusString.length()-1):
+			if charInd == -1:
+				differences.append("A" + focusString[0])
+			else:
+				#print(focusString.substr(charInd, 2))
+				differences.append(focusString.substr(charInd, 2))
+				
+		print(differences)
+		for diff: String in differences:
+			assemble += get_movement(diff[0], diff[1])
+		print(assemble)
+		
+		focusString = assemble
+		
+		
+		print(focusString.length())
+	print(code.substr(0, 3).to_int())
+	print()
+	return focusString.length() * code.substr(0, 3).to_int()
 
 func solve1(input: String) -> int:
 	var solution: int = 0
 	
 	var inputSplit: PackedStringArray = input.split("\n")
 	
+	var rawCodes: PackedStringArray = []
 	for line: String in inputSplit:
 		if line == "": continue
-		
+		rawCodes.append(line)
+	
+	var complexities: int = 0
+	for code: String in rawCodes:
+		complexities += get_complexity(code, 3)
+	
+	solution = complexities
 	
 	return solution
 
