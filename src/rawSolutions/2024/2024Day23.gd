@@ -1,5 +1,6 @@
 extends Solution
 
+# the best advent solutions are the ones you come up with while you are at a christmas party
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,7 +13,6 @@ func _process(delta: float) -> void:
 
 
 func solve1(input: String) -> int:
-	return 0
 	var solution: int = 0
 	
 	var inputSplit: PackedStringArray = input.split("\n")
@@ -80,8 +80,51 @@ func solve2(input: String) -> int:
 		else:
 			computers[lineComputers[1]].append(lineComputers[0])
 	
+	var biggestInComputers: Array = []
+	
+	# gets an array of the biggest group that a computer belongs to
 	for computer: String in computers:
-		print(computer + ": " + str(computers[computer]))
-		await get_tree().create_timer(.001).timeout
+		
+		# get mutable list of connected neighbors
+		var connectedComputers: Array = computers[computer].duplicate()
+		# valid computers in group
+		var computersInGroup: Array = []
+		
+		# checking all computers
+		while connectedComputers.size() != 0:
+			
+			# get the first computer to check against whatever remains in the list
+			var focusComputer: String = connectedComputers[0]
+			connectedComputers = connectedComputers.slice(1)
+			
+			# if the rest of the computers aren't connected to the focus computer, remove them
+			var computersToRemove: Array = []
+			for computerCheck: String in connectedComputers:
+				if !computers[focusComputer].has(computerCheck):
+					computersToRemove.append(computerCheck)
+			
+			# if any computers are removed, recheck the focus later, otherwise add as valid
+			if computersToRemove.is_empty():
+				computersInGroup.append(focusComputer)
+			else:
+				for removeComp: String in computersToRemove:
+					connectedComputers.erase(removeComp)
+				connectedComputers.append(focusComputer)
+		
+		computersInGroup.append(computer)
+		computersInGroup.sort()
+		
+		biggestInComputers.append(computersInGroup)
+		
+	var biggestComputerSet: Array = biggestInComputers.reduce(func(accum, focus): return focus if focus.size()>accum.size() else accum, biggestInComputers[0])
+	
+	#print(biggestComputerSet)
+	var assembleAnswer: String = ""
+	
+	for computer: String in biggestComputerSet:
+		assembleAnswer += computer + ","
+	assembleAnswer = assembleAnswer.substr(0, assembleAnswer.length()-1)
+	
+	print(assembleAnswer)
 	
 	return solution
