@@ -77,7 +77,7 @@ func solve1(input: String) -> int:
 	
 	return solution
 
-
+# This will NOT work if the output values swap over to another gate of the same type/register use type
 func solve2(input: String) -> int:
 	var solution: int = 0
 	
@@ -123,9 +123,91 @@ func solve2(input: String) -> int:
 				else:
 					instrTypes[5].append(instr)
 	
-	for type: Array in instrTypes:
-		for instr: Dictionary in type:
-			print("%s %s %s -> %s" % [instr.reg1, instr.operation, instr.reg2, instr.outputReg])
-		print()
+	#for type: Array in instrTypes:
+		#for instr: Dictionary in type:
+			#print("%s %s %s -> %s" % [instr.reg1, instr.operation, instr.reg2, instr.outputReg])
+		#print()
+	
+	var misplacedRegs: Array = []
+	
+	# check AND gates that process the predetermined registers
+	for andNum: Dictionary in instrTypes[0]:
+		var isIncorrect: bool = false
+		
+		# this is just a "i dont want to check for 0" deal, it will give a wrong result if anything that affects z00 is swapped
+		if andNum["reg1"] in ["x00", "y00"]: continue
+		
+		var inOrList: bool = false
+		for searchInstr: Dictionary in instrTypes[3]:
+			if andNum["outputReg"] in [searchInstr["reg1"], searchInstr["reg2"]]:
+				inOrList = true
+				break
+		if not inOrList: isIncorrect = true
+		if isIncorrect: misplacedRegs.append(andNum.outputReg)
+	
+	# check AND gates that use calculated registers
+	for andReg: Dictionary in instrTypes[1]:
+		var isIncorrect: bool = false
+		
+		var inOrList: bool = false
+		for searchInstr: Dictionary in instrTypes[3]:
+			if andReg["outputReg"] in [searchInstr["reg1"], searchInstr["reg2"]]:
+				inOrList = true
+				break
+		
+		if not inOrList: isIncorrect = true
+		if isIncorrect: misplacedRegs.append(andReg.outputReg)
+	
+	# check OR gates with calculated registers
+	for orReg: Dictionary in instrTypes[3]:
+		var isIncorrect: bool = false
+		
+		# the last bit is a special case, leave it alone in calculation
+		if orReg["outputReg"] == "z45": continue
+		
+		var inOrList: bool = false
+		for searchInstr: Dictionary in instrTypes[5]:
+			if orReg["outputReg"] in [searchInstr["reg1"], searchInstr["reg2"]]:
+				for searchInstr2: Dictionary in instrTypes[1]:
+					if orReg["outputReg"] in [searchInstr2["reg1"], searchInstr2["reg2"]]:
+						inOrList = true
+						break
+			if inOrList: break
+		
+		if not inOrList: isIncorrect = true
+		if isIncorrect: misplacedRegs.append(orReg.outputReg)
+	
+	# check XOR gates that use predetermined values
+	for xorNum: Dictionary in instrTypes[4]:
+		var isIncorrect: bool = false
+		
+		# this is just a "i dont want to check for 0" deal, it will give a wrong result if anything that affects z00 is swapped
+		if xorNum["outputReg"] == "z00": continue
+		
+		var inOrList: bool = false
+		for searchInstr: Dictionary in instrTypes[5]:
+			if xorNum["outputReg"] in [searchInstr["reg1"], searchInstr["reg2"]]:
+				for searchInstr2: Dictionary in instrTypes[1]:
+					if xorNum["outputReg"] in [searchInstr2["reg1"], searchInstr2["reg2"]]:
+						inOrList = true
+						break
+			if inOrList: break
+		
+		if not inOrList: isIncorrect = true
+		if isIncorrect: misplacedRegs.append(xorNum.outputReg)
+	
+	# check XOR gates that use calculated values
+	for xorReg: Dictionary in instrTypes[5]:
+		if not xorReg["outputReg"].substr(1, 2).is_valid_int():
+			misplacedRegs.append(xorReg.outputReg)
+	
+	misplacedRegs.sort()
+	
+	var solutionAssemble: String = ""
+	
+	for reg: String in misplacedRegs:
+		solutionAssemble += reg + ","
+	solutionAssemble = solutionAssemble.substr(0, solutionAssemble.length()-1)
+	print(solutionAssemble)
 	
 	return solution
