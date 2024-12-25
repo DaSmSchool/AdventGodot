@@ -16,7 +16,7 @@ static func valid_pos_at_grid(yInd: int, xInd: int, grid: Array) -> bool:
 	return 0 <= yInd and yInd < grid.size() and 0 <= xInd and xInd < grid[0].size()
 
 static func print_grid(grid: Array):
-	for line: Array in grid:
+	for line in grid:
 		var lineAssemble: String = ""
 		for sub in line:
 			lineAssemble += str(sub)
