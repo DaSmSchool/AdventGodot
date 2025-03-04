@@ -12,7 +12,7 @@ config_version=5
 
 config/name="AdventGodot"
 run/main_scene="res://scenes/advent_solutions.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0.0588235, 0.0588235, 0.137255, 1)
 config/icon="res://icon.svg"
 
