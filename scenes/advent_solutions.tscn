@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://wxuoee08fu86"]
+[gd_scene load_steps=47 format=3 uid="uid://wxuoee08fu86"]
 
 [ext_resource type="Script" uid="uid://c17nd2sjed0r6" path="res://src/run_solutions.gd" id="1_2trj4"]
 [ext_resource type="Script" uid="uid://jklfh0c3yt0d" path="res://src/rawSolutions/2020/2020Day1.gd" id="1_vy5lq"]
@@ -21,6 +21,7 @@
 [ext_resource type="Script" uid="uid://cdnj0734vicr6" path="res://src/rawSolutions/2020/2020Day16.gd" id="17_5v5s6"]
 [ext_resource type="Script" uid="uid://dg36hu4v5cbk7" path="res://src/rawSolutions/2024/2024Day3.gd" id="17_f017q"]
 [ext_resource type="Script" uid="uid://3ns85w8jdvg5" path="res://src/rawSolutions/2024/2024Day4.gd" id="18_48657"]
+[ext_resource type="Script" uid="uid://6nqq0nx00dey" path="res://src/rawSolutions/2020/2020Day17.gd" id="18_q3r55"]
 [ext_resource type="Script" uid="uid://cmyoga3j5hvmp" path="res://src/rawSolutions/2024/2024Day5.gd" id="20_4hupm"]
 [ext_resource type="Script" uid="uid://c1rgwp5iq87r2" path="res://src/rawSolutions/2024/2024Day6.gd" id="22_ydlwo"]
 [ext_resource type="Script" uid="uid://dcxq0677nggyb" path="res://src/rawSolutions/2024/2024Day7.gd" id="23_17bfs"]
@@ -43,11 +44,13 @@
 [ext_resource type="Script" uid="uid://bnphicmxciw3y" path="res://src/rawSolutions/2024/2024Day23.gd" id="41_3adw4"]
 [ext_resource type="Script" uid="uid://c8385atshcvmy" path="res://src/rawSolutions/2024/2024Day24.gd" id="42_5k8lx"]
 [ext_resource type="Script" uid="uid://enf87c6ew26e" path="res://src/rawSolutions/2024/2024Day25.gd" id="43_oncrc"]
+[ext_resource type="Script" uid="uid://ck3mpub3gp54c" path="res://src/rawSolutions/18/18Day1.gd" id="45_e1deg"]
+[ext_resource type="Script" uid="uid://cog7nq23s6oky" path="res://src/rawSolutions/18/18Day2.gd" id="46_heqi2"]
 
 [node name="AdventSolutions" type="Node"]
 script = ExtResource("1_2trj4")
-focusYear = 2024
-focusDay = 25
+focusYear = 18
+focusDay = 2
 
 [node name="2020" type="Node" parent="."]
 
@@ -98,6 +101,9 @@ script = ExtResource("16_4x3tj")
 
 [node name="Day16" type="Node" parent="2020"]
 script = ExtResource("17_5v5s6")
+
+[node name="Day17" type="Node" parent="2020"]
+script = ExtResource("18_q3r55")
 
 [node name="2024" type="Node" parent="."]
 
@@ -178,3 +184,11 @@ script = ExtResource("42_5k8lx")
 
 [node name="Day25" type="Node" parent="2024"]
 script = ExtResource("43_oncrc")
+
+[node name="18" type="Node" parent="."]
+
+[node name="Day1" type="Node" parent="18"]
+script = ExtResource("45_e1deg")
+
+[node name="Day2" type="Node" parent="18"]
+script = ExtResource("46_heqi2")
