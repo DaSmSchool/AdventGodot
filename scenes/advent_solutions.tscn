@@ -203,4 +203,4 @@ script = ExtResource("47_25r8t")
 [node name="Day4" type="Node" parent="18"]
 script = ExtResource("48_8dt1h")
 
-[connection signal="got_request" from="18/Day4" to="18/Day4" method="_on_got_request"]
+[connection signal="on_request_done" from="18/Day4" to="18/Day4" method="_on_on_request_done"]

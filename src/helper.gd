@@ -18,7 +18,7 @@ static func get_timezonedb_key() -> String:
 	#print_rich("[rainbow freq=0.2 sat=1.0 val=1.0][wave amp=50.0 freq=5.0 connected=1][color=green] [/color][/wave][/rainbow]")
 	if fileError != 0:
 		print_fail("FAILED TO LOAD API KEY: (" + str(fileError) + ") " + str(error_string(fileError)))
-	print(fileContent.split("\n")[0])
+	#print(fileContent.split("\n")[0])
 	return fileContent.split("\n")[0]
 
 static func valid_pos_at_grid(yInd: int, xInd: int, grid: Array) -> bool:
