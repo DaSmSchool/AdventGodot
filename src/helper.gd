@@ -12,6 +12,15 @@ static func load_advent_input(year: int, day: int) -> String:
 		print_fail("FAILED TO LOAD INPUT: (" + str(fileError) + ") " + str(error_string(fileError)))
 	return fileContent
 
+static func get_timezonedb_key() -> String:
+	var fileContent: String = FileAccess.get_file_as_string("res://api/timezonedb.txt")
+	var fileError: int = FileAccess.get_open_error()
+	#print_rich("[rainbow freq=0.2 sat=1.0 val=1.0][wave amp=50.0 freq=5.0 connected=1][color=green] [/color][/wave][/rainbow]")
+	if fileError != 0:
+		print_fail("FAILED TO LOAD API KEY: (" + str(fileError) + ") " + str(error_string(fileError)))
+	print(fileContent.split("\n")[0])
+	return fileContent.split("\n")[0]
+
 static func valid_pos_at_grid(yInd: int, xInd: int, grid: Array) -> bool:
 	return 0 <= yInd and yInd < grid.size() and 0 <= xInd and xInd < grid[0].size()
 
