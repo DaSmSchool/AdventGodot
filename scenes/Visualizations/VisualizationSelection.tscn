@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://e67of5oi6ufp"]
+
+[node name="VisualizationSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Visualization" type="Button" parent="."]
+layout_mode = 0
+offset_left = -130.0
+offset_top = -38.0
+offset_right = -23.0
+offset_bottom = 37.0
+text = "Visualization"
+
+[node name="Visualization2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 23.0
+offset_top = -38.0
+offset_right = 130.0
+offset_bottom = 37.0
+text = "Raw Answers"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = -20.0
+offset_top = -96.0
+offset_right = 20.0
+offset_bottom = -56.0
+text = "Year"
+fit_content = true
+horizontal_alignment = 1
