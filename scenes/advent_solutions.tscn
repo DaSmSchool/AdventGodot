@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://wxuoee08fu86"]
+[gd_scene load_steps=52 format=3 uid="uid://wxuoee08fu86"]
 
 [ext_resource type="Script" uid="uid://c17nd2sjed0r6" path="res://src/run_solutions.gd" id="1_2trj4"]
 [ext_resource type="Script" uid="uid://jklfh0c3yt0d" path="res://src/rawSolutions/2020/2020Day1.gd" id="1_vy5lq"]
@@ -50,11 +50,12 @@
 [ext_resource type="Script" uid="uid://beeib6ciaeed5" path="res://src/rawSolutions/18/18Day4.gd" id="48_8dt1h"]
 [ext_resource type="Script" uid="uid://dyhdy8c651n5u" path="res://src/rawSolutions/18/18Day5.gd" id="49_s6mwj"]
 [ext_resource type="Script" uid="uid://gfjataw5d22d" path="res://src/rawSolutions/18/18Day6.gd" id="50_p0qpg"]
+[ext_resource type="Script" uid="uid://bdstqn552qv37" path="res://src/rawSolutions/18/18Day7.gd" id="51_uge58"]
 
 [node name="AdventSolutions" type="Node"]
 script = ExtResource("1_2trj4")
 focusYear = 18
-focusDay = 6
+focusDay = 7
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 unique_name_in_owner = true
@@ -211,5 +212,8 @@ script = ExtResource("49_s6mwj")
 
 [node name="Day6" type="Node" parent="18"]
 script = ExtResource("50_p0qpg")
+
+[node name="Day7" type="Node" parent="18"]
+script = ExtResource("51_uge58")
 
 [connection signal="on_request_done" from="18/Day4" to="18/Day4" method="_on_on_request_done"]
