@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cyyhmqgs0sqqe"]
 
-[ext_resource type="PackedScene" uid="uid://e67of5oi6ufp" path="res://scenes/Visualizations/VisualizationSelection.tscn" id="1_b3j6s"]
+[ext_resource type="Script" uid="uid://dt1j87ynr0j8r" path="res://src/VisualizationMenu/visualizations_menu.gd" id="1_5uhtg"]
 
 [node name="VisualizationsMenu" type="Control"]
 layout_mode = 3
@@ -9,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_5uhtg")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -19,10 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.47788, 0.47788, 0.47788, 1)
 
-[node name="VisButtons" type="Control" parent="."]
+[node name="VizualizationMenus" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="VisualizationSelection" parent="." instance=ExtResource("1_b3j6s")]
-layout_mode = 1
