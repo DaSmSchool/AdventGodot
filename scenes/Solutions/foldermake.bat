@@ -1,0 +1,26 @@
+REM: Mass makes 25 folders in current directory
+md Day1
+md Day2
+md Day3
+md Day4
+md Day5
+md Day6
+md Day7
+md Day8
+md Day9
+md Day10
+md Day11
+md Day12
+md Day13
+md Day14
+md Day15
+md Day16
+md Day17
+md Day18
+md Day19
+md Day20
+md Day21
+md Day22
+md Day23
+md Day24
+md Day25
