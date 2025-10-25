@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8uhyv830uyej"]
+
+[ext_resource type="Script" uid="uid://cuyq1wimk3a4k" path="res://scenes/Menu/advent_menu_control.gd" id="1_d31q1"]
+[ext_resource type="PackedScene" uid="uid://cyyhmqgs0sqqe" path="res://scenes/Menu/visualizations_menu.tscn" id="2_duyc1"]
+[ext_resource type="PackedScene" uid="uid://cmh51pkbidwok" path="res://scenes/Menu/RawSolutionRunner.tscn" id="3_duyc1"]
+[ext_resource type="PackedScene" uid="uid://b73tgawlmt6eb" path="res://scenes/Menu/visualization_solution_runner.tscn" id="4_f301d"]
+
+[node name="AdventMenuControl" type="Node"]
+script = ExtResource("1_d31q1")
+
+[node name="VisualizationsMenu" parent="." instance=ExtResource("2_duyc1")]
+
+[node name="RawSolutionRunner" parent="." instance=ExtResource("3_duyc1")]
+
+[node name="VisualizationSolutionRunner" parent="." instance=ExtResource("4_f301d")]

@@ -14,6 +14,7 @@ func get_directories_in_directory(path: String) -> PackedStringArray:
 	assert(dir, "Dir couldn't be accessed: " + path)
 	
 	files = dir.get_directories()
+	
 	#files.sort()
 	return files
 
@@ -25,17 +26,7 @@ func _ready() -> void:
 func add_selections(path: String) -> void:
 	var dirSelections: PackedStringArray = get_directories_in_directory(path)
 	for nextDir: String in dirSelections:
-		var dirPath: String = representPath + nextDir + "/"
-		var leadingSelection: VisualizationMenuSelection = Instantiate.scene(VisualizationMenuSelection)
-		leadingSelection.set_path(dirPath)
-		
-		var selTypeInit: int = (dirPath.split("/").size()-VisualizationMenu.basePath.split("/").size())
-		var selType: VisualizationMenuSelection.SelectionType = selTypeInit as VisualizationMenuSelection.SelectionType
-		leadingSelection.selectionType = selType
-		leadingSelection.head_into_path.connect(call_for_submenu_switch)
-		
-			
-		$GridContainer.add_child(leadingSelection)
+		add_selection(nextDir)
 	
 
 func call_for_submenu_switch(path: String) -> void:
@@ -43,5 +34,14 @@ func call_for_submenu_switch(path: String) -> void:
 	call_submenu_switch.emit(path)
 
 
-func add_solution(year: int, day: int) -> void:
-	pass
+func add_selection(path: String) -> void:
+	var dirPath: String = representPath + path + "/"
+	var leadingSelection: VisualizationMenuSelection = Instantiate.scene(VisualizationMenuSelection)
+	leadingSelection.set_path(dirPath)
+	
+	var selTypeInit: int = (dirPath.split("/").size()-VisualizationMenu.basePath.split("/").size())
+	var selType: VisualizationMenuSelection.SelectionType = selTypeInit as VisualizationMenuSelection.SelectionType
+	leadingSelection.selectionType = selType
+	leadingSelection.head_into_path.connect(call_for_submenu_switch)
+	
+	$GridContainer.add_child(leadingSelection)
