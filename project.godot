@@ -21,6 +21,10 @@ config/icon="res://icon.svg"
 Global="*res://src/helper.gd"
 Instantiate="*res://src/global/instantiate.gd"
 
+[debug]
+
+gdscript/warnings/static_called_on_instance=0
+
 [display]
 
 window/size/viewport_width=1280

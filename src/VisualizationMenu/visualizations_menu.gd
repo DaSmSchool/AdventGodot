@@ -1,2 +1,0 @@
-extends Control
-class_name VisualizationMenu
