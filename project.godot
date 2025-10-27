@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="AdventGodot"
-run/main_scene="uid://cyyhmqgs0sqqe"
+run/main_scene="uid://c8uhyv830uyej"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/bg_color=Color(0.0588235, 0.0588235, 0.137255, 1)
 config/icon="res://icon.svg"
