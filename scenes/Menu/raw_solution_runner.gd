@@ -9,7 +9,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func run_solutions(scriptPath: String, adventInput: String) -> void:
+func run_solutions(problemSet: String, day: int, adventInput: String) -> void:
+	var scriptPath: String = ""
 	$HBoxContainer/RawSolutionPartSolver.solve_given_solution(scriptPath, 1, adventInput)
 	$HBoxContainer/RawSolutionPartSolver2.solve_given_solution(scriptPath, 2, adventInput)
 	

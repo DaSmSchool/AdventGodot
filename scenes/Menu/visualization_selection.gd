@@ -30,7 +30,8 @@ func set_path(path: String) -> void:
 func is_solution_raw() -> String:
 	var dir: DirAccess = DirAccess.open(representPath)
 	var dirFiles: PackedStringArray = dir.get_files()
-	if dir.get_directories().is_empty() and dirFiles.size() == 1:
+	# the size includes the uid of the script file
+	if dir.get_directories().is_empty() and dirFiles.size() == 2:
 		if dirFiles[0].ends_with(".gd"): return representPath + dirFiles[0]
 	return ""
 
@@ -45,6 +46,8 @@ func _on_visualization_pressed() -> void:
 		head_into_path.emit(representPath)
 	else:
 		if is_solution_raw() != "":
+			var splitPath: PackedStringArray = representPath.split("/")
+			print(splitPath)
 			run_raw_script.emit()
 		elif is_solution_visualization() != "":
 			pass

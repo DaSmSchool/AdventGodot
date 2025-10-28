@@ -8,8 +8,9 @@
 [node name="AdventMenuControl" type="Node"]
 script = ExtResource("1_d31q1")
 
-[node name="VisualizationsMenu" parent="." instance=ExtResource("2_duyc1")]
-
 [node name="RawSolutionRunner" parent="." instance=ExtResource("3_duyc1")]
+
+[node name="VisualizationsMenu" parent="." instance=ExtResource("2_duyc1")]
+mouse_filter = 1
 
 [node name="VisualizationSolutionRunner" parent="." instance=ExtResource("4_f301d")]

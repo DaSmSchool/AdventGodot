@@ -10,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_so54k")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -22,6 +23,8 @@ anchor_bottom = 0.9
 
 [node name="RawSolutionPartSolver" parent="HBoxContainer" instance=ExtResource("2_rwcm5")]
 layout_mode = 2
+mouse_filter = 1
 
 [node name="RawSolutionPartSolver2" parent="HBoxContainer" instance=ExtResource("2_rwcm5")]
 layout_mode = 2
+mouse_filter = 1
