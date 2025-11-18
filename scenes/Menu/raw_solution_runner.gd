@@ -9,8 +9,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func run_solutions(problemSet: String, day: int, adventInput: String) -> void:
-	var scriptPath: String = ""
+func get_input_from_solution_path(scriptPath: String) -> String:
+	var scriptPathSplit: PackedStringArray = scriptPath.split("/")
+	var scriptNameSupersplit: PackedStringArray = scriptPathSplit[scriptPathSplit.size()-1].split("Day") 
+	
+	return ""
+
+func run_solutions(scriptPath: String) -> void:
+	var adventInput: String = get_input_from_solution_path(scriptPath)
 	$HBoxContainer/RawSolutionPartSolver.solve_given_solution(scriptPath, 1, adventInput)
 	$HBoxContainer/RawSolutionPartSolver2.solve_given_solution(scriptPath, 2, adventInput)
 	

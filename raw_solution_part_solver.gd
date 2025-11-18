@@ -28,7 +28,7 @@ func solve_thread(solveMethod: Callable, adventInput: String) -> void:
 	postMicroTime = Time.get_ticks_msec()
 	
 	var partElapsed: float = postMicroTime - microTime
-	print("PART SOLUTION: %d" % [partSol])
+	print("PART SOLUTION: %s" % [partSol])
 	print("TIME TAKEN:")
 	print("MILLISECONDS: %dms" % [partElapsed])
 	print("SECONDS: %d seconds" % [partElapsed/1000])

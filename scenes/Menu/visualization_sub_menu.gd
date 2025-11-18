@@ -34,6 +34,7 @@ func call_for_submenu_switch(path: String) -> void:
 	call_submenu_switch.emit(path)
 
 
+
 func add_selection(path: String) -> void:
 	var dirPath: String = representPath + path + "/"
 	var leadingSelection: VisualizationMenuSelection = Instantiate.scene(VisualizationMenuSelection)

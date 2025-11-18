@@ -2,7 +2,6 @@ extends Control
 class_name VisualizationMenuSelection
 
 signal head_into_path(path: String)
-signal run_raw_script(path: String)
 
 enum SelectionType {
 	NONE,
@@ -45,10 +44,11 @@ func _on_visualization_pressed() -> void:
 	if selectionType != SelectionType.SOLUTION:
 		head_into_path.emit(representPath)
 	else:
-		if is_solution_raw() != "":
-			var splitPath: PackedStringArray = representPath.split("/")
-			print(splitPath)
-			run_raw_script.emit()
+		var rawSol: String = is_solution_raw()
+		if rawSol != "":
+			var rootNode: Node = get_tree().current_scene
+			assert(rootNode is AdventMenuControl, "Root node isn't AdventMenuControl")
+			(rootNode as AdventMenuControl).run_raw_advent_solution(rawSol)
 		elif is_solution_visualization() != "":
 			pass
 		else:
