@@ -35,3 +35,8 @@ window/size/viewport_height=720
 timers/tooltip_delay_sec=0.21
 timers/tooltip_delay_sec.editor_hint=0.23
 timers/text_edit_idle_detect_sec=0.6
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
