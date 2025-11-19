@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhdr21ac6awwn"]
+[gd_scene load_steps=3 format=3 uid="uid://bhdr21ac6awwn"]
 
 [ext_resource type="Script" uid="uid://sqb8vq4vbbd4" path="res://scenes/Menu/visualization_sub_menu.gd" id="1_u4vkd"]
+
+[sub_resource type="Theme" id="Theme_xs65g"]
+Button/font_sizes/font_size = 41
 
 [node name="VisualizationSubMenu" type="Control"]
 layout_mode = 3
@@ -19,3 +22,21 @@ anchor_top = 0.15
 anchor_right = 0.85
 anchor_bottom = 0.85
 columns = 5
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -31.0
+offset_right = 35.5
+offset_bottom = -47.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_xs65g")
+text = "Go Back"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

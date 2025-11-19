@@ -22,6 +22,10 @@ func _ready() -> void:
 	assert(not (not representPath or representPath == ""), "Need a valid path for the visualization submenu, not '" + representPath + "'!")
 	add_selections(representPath)
 	
+	var repPathSplit: PackedStringArray = representPath.split("/")
+	if repPathSplit.size() <= 5: $BackButton.disabled = true
+	
+	
 
 func add_selections(path: String) -> void:
 	var dirSelections: PackedStringArray = get_directories_in_directory(path)
@@ -30,7 +34,7 @@ func add_selections(path: String) -> void:
 	
 
 func call_for_submenu_switch(path: String) -> void:
-	if path == VisualizationMenu.basePath: return
+	#if path == VisualizationMenu.basePath: return
 	call_submenu_switch.emit(path)
 
 
@@ -46,3 +50,11 @@ func add_selection(path: String) -> void:
 	leadingSelection.head_into_path.connect(call_for_submenu_switch)
 	
 	$GridContainer.add_child(leadingSelection)
+
+
+func _on_back_button_pressed() -> void:
+	var repPathSplit: PackedStringArray = representPath.split("/")
+	var charRemoveAmount: int = repPathSplit[repPathSplit.size()-2].length() + 1
+	var backPath: String = representPath.left(charRemoveAmount * -1)
+	print(backPath)
+	call_for_submenu_switch(backPath)
