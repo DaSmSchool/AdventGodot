@@ -6,7 +6,10 @@ signal call_submenu_switch(path: String)
 @export var problemSet: String = ""
 @export var days: int = 25
 
-var representPath: String
+var representPath: String:
+	set(str):
+		representPath = str
+		%LocationLabel.text = representPath
 
 func get_directories_in_directory(path: String) -> PackedStringArray:
 	var files: PackedStringArray
@@ -29,8 +32,22 @@ func _ready() -> void:
 
 func add_selections(path: String) -> void:
 	var dirSelections: PackedStringArray = get_directories_in_directory(path)
-	for nextDir: String in dirSelections:
-		add_selection(nextDir)
+	var sortedNums: Array = []
+	if dirSelections[0].contains("Day"):
+		var numOrderDict: Dictionary[int, int] = {}
+		for dirSel: String in dirSelections:
+			var dirNum: int = dirSel.substr(3).to_int()
+			numOrderDict[dirNum] = 1
+		sortedNums = numOrderDict.keys()
+		sortedNums.sort()
+	
+	if not sortedNums.is_empty():
+		for nextDay: int in sortedNums:
+			var nextDir: String = "Day" + str(nextDay)
+			add_selection(nextDir)
+	else:
+		for nextDir: String in dirSelections:
+			add_selection(nextDir)
 	
 
 func call_for_submenu_switch(path: String) -> void:

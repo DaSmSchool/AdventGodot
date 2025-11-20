@@ -25,7 +25,19 @@ func get_input_from_solution_path(scriptPath: String) -> String:
 func run_solutions(scriptPath: String) -> void:
 	var adventInput: String = get_input_from_solution_path(scriptPath)
 	assert(adventInput != "", "No input given!!")
-	$HBoxContainer/RawSolutionPartSolver.solve_given_solution(scriptPath, 1, adventInput)
-	$HBoxContainer/RawSolutionPartSolver2.solve_given_solution(scriptPath, 2, adventInput)
+	
+	var partSolver1: RawSolutionPartSolver = Instantiate.scene(RawSolutionPartSolver)
+	$HBoxContainer.add_child(partSolver1)
+	var partSolver2: RawSolutionPartSolver = Instantiate.scene(RawSolutionPartSolver)
+	$HBoxContainer.add_child(partSolver2)
+	
+	for i: int in range(1, 3):
+		$HBoxContainer.get_child(i-1).solve_given_solution(scriptPath, i, adventInput)
 	
 	
+
+
+func _on_exit_button_pressed() -> void:
+	for child: Node in $HBoxContainer.get_children():
+		child.queue_free()
+	get_tree().current_scene.raw_solution_to_menu()

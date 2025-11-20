@@ -5,3 +5,7 @@ func run_raw_advent_solution(path: String) -> void:
 	$VisualizationsMenu.hide()
 	$RawSolutionRunner.show()
 	$RawSolutionRunner.run_solutions(path)
+
+func raw_solution_to_menu() -> void:
+	$VisualizationsMenu.show()
+	$RawSolutionRunner.hide()

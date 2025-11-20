@@ -1,7 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cmh51pkbidwok"]
 
 [ext_resource type="Script" uid="uid://dnyvdmhxjx0dv" path="res://scenes/Menu/raw_solution_runner.gd" id="1_so54k"]
-[ext_resource type="PackedScene" uid="uid://dqcf05u4d7r5b" path="res://scenes/Menu/raw_solution_part_solver.tscn" id="2_rwcm5"]
+
+[sub_resource type="Theme" id="Theme_rwcm5"]
+Button/font_sizes/font_size = 33
+Label/font_sizes/font_size = 33
 
 [node name="RawSolutionRunner" type="Control"]
 layout_mode = 3
@@ -20,9 +23,13 @@ anchor_left = 0.1
 anchor_top = 0.1
 anchor_right = 0.9
 anchor_bottom = 0.9
+alignment = 1
 
-[node name="RawSolutionPartSolver" parent="HBoxContainer" instance=ExtResource("2_rwcm5")]
-layout_mode = 2
+[node name="Exit Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+theme = SubResource("Theme_rwcm5")
+text = "Exit Solution"
 
-[node name="RawSolutionPartSolver2" parent="HBoxContainer" instance=ExtResource("2_rwcm5")]
-layout_mode = 2
+[connection signal="pressed" from="Exit Button" to="." method="_on_exit_button_pressed"]

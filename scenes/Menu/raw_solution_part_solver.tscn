@@ -1,8 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://dqcf05u4d7r5b"]
 
-[ext_resource type="Script" uid="uid://ddmim8any2at3" path="res://raw_solution_part_solver.gd" id="1_no51k"]
+[ext_resource type="Script" uid="uid://ddmim8any2at3" path="res://scenes/Menu/raw_solution_part_solver.gd" id="1_no51k"]
 
 [node name="RawSolutionPartSolver" type="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 3
 anchor_right = 0.4
 anchor_bottom = 1.0
@@ -10,17 +12,108 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = -20.0
-grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 1
 script = ExtResource("1_no51k")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.13803378, 0.13803375, 0.13803375, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.13803378, 0.13803375, 0.13803375, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[rainbow freq=0.5][wave][i]Solution:[/i][/wave][/rainbow]"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+print
+"
+fit_content = true
+
+[node name="TimeTakenHBox" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TimeTakenText" type="Label" parent="VBoxContainer/TimeTakenHBox"]
+layout_mode = 2
+text = "Time Taken:"
+
+[node name="TimeMsDisplay" type="Label" parent="VBoxContainer/TimeTakenHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SolutionText" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Solution: "
+
+[node name="SolutionDisplay" type="Label" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="CopyButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Copy Solution"
+
+[connection signal="pressed" from="VBoxContainer/CopyButton" to="." method="_on_copy_button_pressed"]
