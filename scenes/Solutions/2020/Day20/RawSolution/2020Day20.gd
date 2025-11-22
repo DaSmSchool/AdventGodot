@@ -6,24 +6,24 @@ func parse_raw_tile_string(input: String) -> Dictionary:
 	
 	var tileDictSplit: PackedStringArray = input.split("\n\n")
 	for tile: String in tileDictSplit:
+		var newTile: Dictionary = {}
 		var tileId: int = 0
 		for row: String in tile.split("\n"):
 			if row.is_empty(): continue
 			#print(row)
 			if row.contains("Tile"):
 				tileId = row.substr(row.find(" ")+1, row.length()-6).to_int()
-				tileDict[tileId] = {}
-				tileDict[tileId]["tileId"] = tileId
-				tileDict[tileId]["rawImage"] = []
-				tileDict[tileId]["sharedEdgeTiles"] = []
-				tileDict[tileId]["edgeData"] = ["", "", "", ""]
+				newTile["tileId"] = tileId
+				newTile["rawImage"] = []
+				newTile["sharedEdgeTiles"] = []
+				newTile["edgeData"] = ["", "", "", ""]
 			else:
-				tileDict[tileId]["rawImage"].append(row)
+				newTile["rawImage"].append(row)
 		#print()
 		
-		var focusTile: Array = tileDict[tileId]["rawImage"]
-		tileDict[tileId]["edgeData"][0] = focusTile.front()
-		tileDict[tileId]["edgeData"][2] = focusTile.back()
+		var focusTile: Array = newTile["rawImage"]
+		newTile["edgeData"][0] = focusTile.front()
+		newTile["edgeData"][2] = focusTile.back()
 		
 		var assembleLeftColumn: String = ""
 		var assembleRightColumn: String = ""
@@ -32,9 +32,10 @@ func parse_raw_tile_string(input: String) -> Dictionary:
 			assembleLeftColumn += row.left(1)
 			assembleRightColumn += row.right(1)
 		
-		tileDict[tileId]["edgeData"][1] = assembleRightColumn
-		tileDict[tileId]["edgeData"][3] = assembleLeftColumn
+		newTile["edgeData"][1] = assembleRightColumn
+		newTile["edgeData"][3] = assembleLeftColumn
 		
+		tileDict[tileId] = newTile
 		#for edge: String in tileDict[tileId]["edgeData"]:
 			#print(edge)
 		
@@ -194,8 +195,60 @@ func make_grid_from_tile_dict(rawTileDict: Dictionary) -> Array:
 		focusRow += 1
 	
 	return tileArray
-	
 
+func get_actual_surrounding_tile_ids(tileGrid: Array, rowInd: int, tileInd: int) -> Array:
+	var surroundingArray: Array = []
+	for rowOff: int in range(-1, 2):
+		for colOff: int in range(-1, 2):
+			if abs(rowOff + colOff) % 2 == 1:
+				var absRow: int = rowInd + rowOff
+				var absCol: int = tileInd + colOff
+				if Helper.valid_pos_at_grid(absRow, absCol, tileGrid):
+					var addTile: Dictionary = tileGrid[absRow][absCol]
+					surroundingArray.append(addTile["tileId"])
+	return surroundingArray
+
+func get_tile_orientation_edge_order(tile: Dictionary) -> Array:
+	var surroundingArray: Array = []
+	for edge: Array in tile["sharedEdgeTiles"]:
+		surroundingArray.append(edge[0])
+	return surroundingArray
+
+func orient_tiles_in_grid(tileGrid: Array) -> void:
+	for rowInd: int in tileGrid.size():
+		for tileInd: int in tileGrid[rowInd].size():
+			var tile: Dictionary = tileGrid[rowInd][tileInd]
+			var surroundingTileIds: Array = get_actual_surrounding_tile_ids(tileGrid, rowInd, tileInd)
+			var imageSurroundingTileIds: Array = get_tile_orientation_edge_order(tile)
+			
+			var rotated: bool = false
+			var firstElementDistance = imageSurroundingTileIds.find(surroundingTileIds[0])
+			match firstElementDistance:
+				0:
+					pass
+				1:
+					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, 1)
+					tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
+					rotated = true
+				2:
+					var tempStore: int = imageSurroundingTileIds[0]
+					imageSurroundingTileIds[0] = imageSurroundingTileIds[2]
+					imageSurroundingTileIds[2] = tempStore
+					tile["rawImage"].reverse()
+				3:
+					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, -1)
+					tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], -1)
+					rotated = true
+			if rotated:
+				if surroundingTileIds[0] != imageSurroundingTileIds[0]:
+					var tempStore: int = imageSurroundingTileIds[0]
+					imageSurroundingTileIds[0] = imageSurroundingTileIds[2]
+					imageSurroundingTileIds[2] = tempStore
+					tile["rawImage"].reverse()
+			else:
+				if surroundingTileIds[1] != imageSurroundingTileIds[1]:
+					for rawImgRowInd: int in tile["rawImage"].size():
+						tile["rawImage"][rawImgRowInd].reverse()
 func solve2(input: String) -> Variant:
 	var solution: int = 1
 	
@@ -223,15 +276,23 @@ func solve2(input: String) -> Variant:
 							
 	var tileGrid: Array = make_grid_from_tile_dict(rawTileDict)
 	
-	var quickPrintArray: Array = []
+	orient_tiles_in_grid(tileGrid)
 	
 	for rowInd: int in tileGrid.size():
-		quickPrintArray.append([])
-		for element in tileGrid[rowInd]:
-			if element == null: quickPrintArray.back().append(null)
-			else: quickPrintArray.back().append(element["tileId"])
-		
-	for row in quickPrintArray:
-		print(row)
+		for tile: Dictionary in tileGrid[rowInd]:
+			print(tile["tileId"])
+			Helper.print_grid(tile["rawImage"])
+			print()
+	
+	#var quickPrintArray: Array = []
+	#
+	#for rowInd: int in tileGrid.size():
+		#quickPrintArray.append([])
+		#for element in tileGrid[rowInd]:
+			#if element == null: quickPrintArray.back().append(null)
+			#else: quickPrintArray.back().append(element["tileId"])
+		#
+	#for row in quickPrintArray:
+		#print(row)
 	
 	return solution

@@ -30,3 +30,62 @@ static func print_grid(grid: Array):
 		for sub in line:
 			lineAssemble += str(sub)
 		print(lineAssemble)
+
+static func shift_array(array: Array, n: int) -> Array:
+	var size: int = array.size()
+	var steps: int = abs(n) % size
+	if size * steps == 0:
+		return array
+	
+	var rotated_array: Array = array.duplicate()
+	
+	for i in range(steps):
+		if sign(n) == 1:
+			var front_element = rotated_array.pop_front()
+			rotated_array.push_back(front_element)
+		elif sign(n) == -1:
+			var back_element = rotated_array.pop_back()
+			rotated_array.push_front(back_element)
+	
+	return rotated_array
+
+static func rotate_2d_array(arr: Array, n: int) -> Array:
+	var height: int = arr.size()
+	if height == 0: return []
+	var width: int = arr[0].size()
+
+	var new_arr = []
+	for i: int in range(width):
+		new_arr.append([])
+		new_arr[i].resize(height)
+	
+	for amnt: int in range(n):
+		for i: int in range(height):
+			for j: int in range(width):
+				if sign(n) == 1:
+					new_arr[j][height - 1 - i] = arr[i][j]
+				elif sign(n) == -1:
+					new_arr[width-1-j][i] = arr[i][j]
+			
+	return new_arr
+
+static func rotate_2d_string_array(arr: Array, n: int) -> Array:
+	var height: int = arr.size()
+	if height == 0: return []
+	var width: int = arr[0].length()
+
+	var newArr = []
+	for i: int in range(width):
+		newArr.append("")
+		for emptyCharInt: int in range(height):
+			newArr[newArr.size()-1] += " "
+	
+	for amnt: int in range(n):
+		for i: int in range(height):
+			for j: int in range(width):
+				if sign(n) == 1:
+					newArr[j][height - 1 - i] = arr[i][j]
+				elif sign(n) == -1:
+					newArr[width-1-j][i] = arr[i][j]
+			
+	return newArr
