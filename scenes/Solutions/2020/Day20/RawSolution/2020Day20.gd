@@ -4,10 +4,11 @@ func parse_raw_tile_string(input: String) -> Dictionary:
 	var tileDict: Dictionary = {}
 	
 	
-	var tileDictSplit: PackedStringArray = input.split("\n\n", false)
+	var tileDictSplit: PackedStringArray = input.split("\n\n")
 	for tile: String in tileDictSplit:
 		var tileId: int = 0
 		for row: String in tile.split("\n"):
+			if row.is_empty(): continue
 			print(row)
 			if row.contains("Tile"):
 				tileId = row.substr(row.find(" ")+1, row.length()-6).to_int()
