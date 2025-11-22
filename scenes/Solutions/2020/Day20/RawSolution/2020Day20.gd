@@ -218,6 +218,14 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 	for rowInd: int in tileGrid.size():
 		for tileInd: int in tileGrid[rowInd].size():
 			var tile: Dictionary = tileGrid[rowInd][tileInd]
+			print(tile["tileId"])
+			for row: String in tile["rawImage"]:
+				print(row)
+			print("________________")
+			
+			if tile["tileId"] == 1171:
+				pass
+			
 			var surroundingTileIds: Array = get_actual_surrounding_tile_ids(tileGrid, rowInd, tileInd)
 			var imageSurroundingTileIds: Array = get_tile_orientation_edge_order(tile)
 			
@@ -249,6 +257,10 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 				if surroundingTileIds[1] != imageSurroundingTileIds[1]:
 					for rawImgRowInd: int in tile["rawImage"].size():
 						tile["rawImage"][rawImgRowInd].reverse()
+			
+			for row: String in tile["rawImage"]:
+				print(row)
+			print("________________")
 func solve2(input: String) -> Variant:
 	var solution: int = 1
 	
@@ -276,13 +288,15 @@ func solve2(input: String) -> Variant:
 							
 	var tileGrid: Array = make_grid_from_tile_dict(rawTileDict)
 	
-	orient_tiles_in_grid(tileGrid)
+	#for rowInd: int in tileGrid.size():
+		#for tile: Dictionary in tileGrid[rowInd]:
+			#print(tile["tileId"])
+			#Helper.print_grid(tile["rawImage"])
+			#print()
 	
-	for rowInd: int in tileGrid.size():
-		for tile: Dictionary in tileGrid[rowInd]:
-			print(tile["tileId"])
-			Helper.print_grid(tile["rawImage"])
-			print()
+	orient_tiles_in_grid(tileGrid)
+	#print("______________________")
+	
 	
 	#var quickPrintArray: Array = []
 	#
