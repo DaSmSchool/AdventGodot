@@ -80,11 +80,11 @@ static func rotate_2d_string_array(arr: Array, n: int) -> Array:
 		for emptyCharInt: int in range(height):
 			newArr[newArr.size()-1] += " "
 	
-	for amnt: int in range(n):
+	for amnt: int in range(abs(n)):
 		for i: int in range(height):
 			for j: int in range(width):
 				if sign(n) == 1:
-					newArr[j][height - 1 - i] = arr[i][j]
+					newArr[j][height-1-i] = arr[i][j]
 				elif sign(n) == -1:
 					newArr[width-1-j][i] = arr[i][j]
 			

@@ -236,12 +236,14 @@ func fix_tile_orientation(tile: Dictionary, tileGrid: Array, rowInd: int, tileIn
 	var surroundingTileIds: Array = get_actual_surrounding_tile_ids(tileGrid, rowInd, tileInd)
 	var imageSurroundingTileIds: Array = get_tile_orientation_edge_order(tile)
 	
+	if tile["tileId"] == 2953:
+		pass
+	
 	#print(surroundingTileIds)
 	#print(imageSurroundingTileIds)
 	#print()
 	
-	var rotated: bool = false
-	
+	# first pass, either rotation or flipping happens
 	var firstTestElement: int = -1
 	var firstTestElementInd: int
 	for elementInd in imageSurroundingTileIds.size():
@@ -253,38 +255,35 @@ func fix_tile_orientation(tile: Dictionary, tileGrid: Array, rowInd: int, tileIn
 	var firstCompareInd: int = surroundingTileIds.find(imageSurroundingTileIds[firstTestElementInd])
 	
 	var firstElementDistance = firstTestElementInd - firstCompareInd
+	
+	# if the two improperly placed objects are 2 spots over, that means they can be flipped
+	# if they are an odd amount of spaces over, that can be fixed with a rotation
 	match firstElementDistance:
 		0:
 			pass
 		1, -3:
-			imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, -1)
-			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
-			rotated = true
+			imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, 1)
+			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], -1)
 		2, -2:
 			var tempStore = imageSurroundingTileIds[firstCompareInd]
 			imageSurroundingTileIds[firstCompareInd] = imageSurroundingTileIds[firstTestElementInd]
 			imageSurroundingTileIds[firstTestElementInd] = tempStore
 			tile["rawImage"].reverse()
 		3, -1:
-			imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, 1)
-			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], -1)
-			rotated = true
+			imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, -1)
+			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
 	
 	#print(surroundingTileIds)
 	#print(imageSurroundingTileIds)
 	#print()
-	#pass
+	pass
 	
+	# second pass, only either horizontal or flipping occurs
 	var secondTestElementInd: int = -1
 	for elementInd in imageSurroundingTileIds.size():
 		if imageSurroundingTileIds[elementInd] != null and imageSurroundingTileIds[elementInd] != firstTestElement:
 			if imageSurroundingTileIds[elementInd] != surroundingTileIds[elementInd]:
 				secondTestElementInd = elementInd
-	
-	#print()
-	#print()
-	
-	#Helper.print_grid(tile["rawImage"])
 	
 	var secondCompareInd: int
 	# if no differing elements were found
@@ -301,7 +300,7 @@ func fix_tile_orientation(tile: Dictionary, tileGrid: Array, rowInd: int, tileIn
 					tile["rawImage"][rawImgRowInd] = tile["rawImage"][rawImgRowInd].reverse()
 	
 	#Helper.print_grid(tile["rawImage"])
-	
+	#
 	#print(surroundingTileIds)
 	#print(imageSurroundingTileIds)
 	#print()
@@ -318,11 +317,84 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 			var tile: Dictionary = tileGrid[rowInd][tileInd]
 			fix_tile_orientation(tile, tileGrid, rowInd, tileInd)
 
-func get_picture(tileArray: Array) -> String:
-	return ""
+func strip_tile_border(tile: Dictionary) -> void:
+	var tileImage: Array = tile["rawImage"]
+	
+	#Helper.print_grid(tileImage)
+	#print()
+	tileImage = tileImage.slice(1, tileImage.size()-1)
+	
+	for rowInd: int in tileImage.size():
+		tileImage[rowInd] = tileImage[rowInd].substr(1, tileImage[rowInd].length()-2)
+	
+	#Helper.print_grid(tileImage)
+	#print()
+	
+	tile["rawImage"] = tileImage
+
+func get_picture(tileArray: Array) -> PackedStringArray:
+	var manipTileArray: Array = tileArray.duplicate_deep()
+	for row: Array in manipTileArray:
+		for tile: Dictionary in row:
+			strip_tile_border(tile)
+	
+	var assemblePicture: PackedStringArray = []
+	for row: Array in manipTileArray:
+		var tileHeight: int = row[0]["rawImage"].size()
+		for tileRow: int in tileHeight:
+			var rowStr: String = ""
+			for tile: Dictionary in row:
+				rowStr += tile["rawImage"][tileRow]
+			assemblePicture.append(rowStr)
+	
+	return assemblePicture
+
+func get_monster_check_spots(monsterStrings: PackedStringArray) -> Array:
+	var checkSpotArray: Array = []
+	for rowInd: int in monsterStrings.size():
+		for colInd: int in monsterStrings[rowInd].length():
+			if monsterStrings[rowInd][colInd] == "#":
+				checkSpotArray.append(Vector2i(colInd, rowInd))
+	return checkSpotArray
+
+func find_monster_areas_in_picture(picture: PackedStringArray, monster: Array, monsterWidth: int, monsterLength: int) -> Dictionary:
+	var monsterSpotDict: Dictionary[Vector2i, int] = {}
+	for rowInd: int in range(0, picture.size()-monsterLength):
+		for colInd: int in range(0, picture[0].length()-monsterWidth):
+			var monsterSpotList: Array[Vector2i] = []
+			var canHaveMonster: bool = true
+			for spot: Vector2i in monster:
+				if not canHaveMonster: continue
+				var spotAbsX: int = colInd + spot.x
+				var spotAbsY: int = rowInd + spot.y
+				if picture[spotAbsY][spotAbsX] != "#":
+					canHaveMonster = false
+				else:
+					monsterSpotList.append(Vector2i(spotAbsX, spotAbsY))
+			if canHaveMonster:
+				for spot: Vector2i in monsterSpotList:
+					monsterSpotDict[spot] = 1
+	return monsterSpotDict
+
+func print_monstered_grid(picture: PackedStringArray, spots: Array) -> void:
+	for rowInd: int in picture.size():
+		var printRow: String = ""
+		for colInd: int in picture[0].length():
+			if spots.has(Vector2i(colInd, rowInd)):
+				printRow += "O"
+			else:
+				printRow += picture[rowInd][colInd]
+		print(printRow)
+
+func get_hash_count(picture: PackedStringArray) -> int:
+	var hashCount: int = 0
+	for row: String in picture:
+		for char: String in row:
+			if char == "#":
+				hashCount += 1
+	return hashCount
 
 func solve2(input: String) -> Variant:
-	var solution: int = 1
 	
 	var rawTileDict: Dictionary = parse_raw_tile_string(input)
 	
@@ -332,12 +404,18 @@ func solve2(input: String) -> Variant:
 	
 	orient_tiles_in_grid(tileGrid)
 	
-	var compactBorderlessArray: String = get_picture(tileGrid)
+	var compactBorderlessArray: PackedStringArray = get_picture(tileGrid)
 	
 	var length: int = get_tile_dict_width(rawTileDict)
 	
 	for row: Array in tileGrid:
 		var tileHeight: int = row[0]["rawImage"].size()
+		
+		var tileIdRow: String = ""
+		for tile: Dictionary in row:
+			tileIdRow += str(tile["tileId"]) + "       "
+		print(tileIdRow)
+		
 		for tileRow: int in tileHeight:
 			var rowStr: String = ""
 			for tile: Dictionary in row:
@@ -345,4 +423,30 @@ func solve2(input: String) -> Variant:
 			print(rowStr)
 		print()
 	
-	return solution
+	#Helper.print_grid(compactBorderlessArray)
+	
+	var monsterArray: PackedStringArray = [
+		"                  # ",
+		"#    ##    ##    ###",
+		" #  #  #  #  #  #   "
+	]
+	
+	var monsterWidth: int = monsterArray[0].length()
+	var monsterLength: int = monsterArray.size()
+	
+	var monsterCheckspots: Array = get_monster_check_spots(monsterArray)
+	var monsterSpots: Dictionary
+	
+	var hashCount: int = get_hash_count(compactBorderlessArray)
+	
+	for flip in range(2):
+		for i in range(4):
+			monsterSpots = find_monster_areas_in_picture(compactBorderlessArray, monsterCheckspots, monsterWidth, monsterLength)
+			if monsterSpots.keys().size() != 0:
+				print_monstered_grid(compactBorderlessArray, monsterSpots.keys())
+				return hashCount - monsterSpots.keys().size()
+			else:
+				compactBorderlessArray = Helper.rotate_2d_string_array(compactBorderlessArray, 1)
+		compactBorderlessArray.reverse()
+	
+	return hashCount - monsterSpots.keys().size()
