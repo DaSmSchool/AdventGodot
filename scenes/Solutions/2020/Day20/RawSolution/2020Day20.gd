@@ -198,6 +198,7 @@ func make_grid_from_tile_dict(rawTileDict: Dictionary) -> Array:
 
 func get_actual_surrounding_tile_ids(tileGrid: Array, rowInd: int, tileInd: int) -> Array:
 	var surroundingArray: Array = []
+	surroundingArray.resize(4)
 	for rowOff: int in range(-1, 2):
 		for colOff: int in range(-1, 2):
 			if abs(rowOff + colOff) % 2 == 1:
@@ -205,13 +206,23 @@ func get_actual_surrounding_tile_ids(tileGrid: Array, rowInd: int, tileInd: int)
 				var absCol: int = tileInd + colOff
 				if Helper.valid_pos_at_grid(absRow, absCol, tileGrid):
 					var addTile: Dictionary = tileGrid[absRow][absCol]
-					surroundingArray.append(addTile["tileId"])
+					var offVector: Vector2i = Vector2i(colOff, rowOff)
+					if offVector == Vector2i(0, -1):
+						surroundingArray[0] = addTile["tileId"]
+					elif offVector == Vector2i(1, 0):
+						surroundingArray[1] = addTile["tileId"]
+					elif offVector == Vector2i(0, 1):
+						surroundingArray[2] = addTile["tileId"]
+					elif offVector == Vector2i(-1, 0):
+						surroundingArray[3] = addTile["tileId"]
+					
 	return surroundingArray
 
 func get_tile_orientation_edge_order(tile: Dictionary) -> Array:
 	var surroundingArray: Array = []
+	surroundingArray.resize(4)
 	for edge: Array in tile["sharedEdgeTiles"]:
-		surroundingArray.append(edge[0])
+		surroundingArray[edge[2]] = edge[0]
 	return surroundingArray
 
 func orient_tiles_in_grid(tileGrid: Array) -> void:
@@ -223,40 +234,77 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 				print(row)
 			print("________________")
 			
-			if tile["tileId"] == 1171:
+			if tile["tileId"] == 2311:
 				pass
 			
 			var surroundingTileIds: Array = get_actual_surrounding_tile_ids(tileGrid, rowInd, tileInd)
 			var imageSurroundingTileIds: Array = get_tile_orientation_edge_order(tile)
 			
+			print(surroundingTileIds)
+			print(imageSurroundingTileIds)
+			print()
+			
 			var rotated: bool = false
-			var firstElementDistance = imageSurroundingTileIds.find(surroundingTileIds[0])
+			
+			var firstTestElement: int = -1
+			var firstTestElementInd: int
+			for elementInd in imageSurroundingTileIds.size():
+				if firstTestElement != -1: continue
+				if imageSurroundingTileIds[elementInd] != null:
+					firstTestElement = imageSurroundingTileIds[elementInd]
+					firstTestElementInd = elementInd
+			
+			var firstCompareInd: int = imageSurroundingTileIds.find(surroundingTileIds[firstTestElementInd])
+			
+			var firstElementDistance = firstTestElementInd - firstCompareInd
 			match firstElementDistance:
 				0:
 					pass
-				1:
+				1, -3:
 					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, 1)
 					tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
 					rotated = true
-				2:
-					var tempStore: int = imageSurroundingTileIds[0]
-					imageSurroundingTileIds[0] = imageSurroundingTileIds[2]
-					imageSurroundingTileIds[2] = tempStore
+				2, -2:
+					var tempStore = imageSurroundingTileIds[firstCompareInd]
+					imageSurroundingTileIds[firstCompareInd] = imageSurroundingTileIds[firstTestElementInd]
+					imageSurroundingTileIds[firstTestElementInd] = tempStore
 					tile["rawImage"].reverse()
-				3:
+				3, -1:
 					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, -1)
 					tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], -1)
 					rotated = true
-			if rotated:
-				if surroundingTileIds[0] != imageSurroundingTileIds[0]:
-					var tempStore: int = imageSurroundingTileIds[0]
-					imageSurroundingTileIds[0] = imageSurroundingTileIds[2]
-					imageSurroundingTileIds[2] = tempStore
-					tile["rawImage"].reverse()
-			else:
-				if surroundingTileIds[1] != imageSurroundingTileIds[1]:
-					for rawImgRowInd: int in tile["rawImage"].size():
-						tile["rawImage"][rawImgRowInd].reverse()
+			
+			print(surroundingTileIds)
+			print(imageSurroundingTileIds)
+			print()
+			pass
+			
+			var secondTestElementInd: int = -1
+			for elementInd in imageSurroundingTileIds.size():
+				if imageSurroundingTileIds[elementInd] != null and imageSurroundingTileIds[elementInd] != firstTestElement:
+					if imageSurroundingTileIds[elementInd] != surroundingTileIds[elementInd]:
+						secondTestElementInd = elementInd
+			var secondCompareInd: int
+			# if no differing elements were found
+			if secondTestElementInd != -1:
+				secondCompareInd = imageSurroundingTileIds.find(surroundingTileIds[secondTestElementInd])
+				
+				
+				if secondTestElementInd != secondCompareInd:
+					var tempStore: int = imageSurroundingTileIds[secondTestElementInd]
+					imageSurroundingTileIds[secondTestElementInd] = imageSurroundingTileIds[secondCompareInd]
+					imageSurroundingTileIds[secondCompareInd] = tempStore
+					if secondTestElementInd in [0, 2]:
+						tile["rawImage"].reverse()
+					else:
+						for rawImgRowInd: int in tile["rawImage"].size():
+							tile["rawImage"][rawImgRowInd].reverse()
+			
+			print(surroundingTileIds)
+			print(imageSurroundingTileIds)
+			print()
+			assert(surroundingTileIds == imageSurroundingTileIds, "not transformed properly")
+			pass
 			
 			for row: String in tile["rawImage"]:
 				print(row)
@@ -278,13 +326,15 @@ func solve2(input: String) -> Variant:
 					isShared = true
 			
 			if tile != focusTile and not isShared:
-				for tileEdge: String in tile["edgeData"]:
-					for focusTileEdge: String in focusTile["edgeData"]:
+				for tileEdgeInd: int in tile["edgeData"].size():
+					var tileEdge: String = tile["edgeData"][tileEdgeInd]
+					for focusTileEdgeInd: int in focusTile["edgeData"].size():
+						var focusTileEdge: String = focusTile["edgeData"][focusTileEdgeInd]
 						if tileEdge == focusTileEdge or tileEdge == focusTileEdge.reverse():
 							#print(str(tileId) + "/" + str(focusTileId))
 							#print(tileEdge)
-							tile["sharedEdgeTiles"].append([focusTileId, tileEdge])
-							focusTile["sharedEdgeTiles"].append([tileId, focusTileEdge])
+							tile["sharedEdgeTiles"].append([focusTileId, tileEdge, tileEdgeInd])
+							focusTile["sharedEdgeTiles"].append([tileId, focusTileEdge, focusTileEdgeInd])
 							
 	var tileGrid: Array = make_grid_from_tile_dict(rawTileDict)
 	
