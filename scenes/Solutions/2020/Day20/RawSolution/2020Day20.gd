@@ -229,13 +229,6 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 	for rowInd: int in tileGrid.size():
 		for tileInd: int in tileGrid[rowInd].size():
 			var tile: Dictionary = tileGrid[rowInd][tileInd]
-			#print(tile["tileId"])
-			#for row: String in tile["rawImage"]:
-				#print(row)
-			#print("________________")
-			
-			if tile["tileId"] == 2473:
-				pass
 			
 			var surroundingTileIds: Array = get_actual_surrounding_tile_ids(tileGrid, rowInd, tileInd)
 			var imageSurroundingTileIds: Array = get_tile_orientation_edge_order(tile)
@@ -317,42 +310,48 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 			#for row: String in tile["rawImage"]:
 				#print(row)
 			#print("________________")
+
+func link_tiles(tile1: Dictionary, tile2: Dictionary) -> void:
+	var isShared: bool = false
+	for shareEdge: Array in tile1["sharedEdgeTiles"]:
+		if isShared: continue
+		if shareEdge[0] == tile2["tileId"]:
+			isShared = true
+	
+	if tile1 != tile2 and not isShared:
+		for tileEdgeInd: int in tile1["edgeData"].size():
+			var tileEdge: String = tile1["edgeData"][tileEdgeInd]
+			for focusTileEdgeInd: int in tile2["edgeData"].size():
+				var focusTileEdge: String = tile2["edgeData"][focusTileEdgeInd]
+				if tileEdge == focusTileEdge or tileEdge == focusTileEdge.reverse():
+					#print(str(tileId) + "/" + str(focusTileId))
+					#print(tileEdge)
+					tile1["sharedEdgeTiles"].append([tile2["tileId"], tileEdge, tileEdgeInd])
+					tile2["sharedEdgeTiles"].append([tile1["tileId"], focusTileEdge, focusTileEdgeInd])
+
+func link_tiles_in_tile_dict(rawTileDict: Dictionary) -> void:
+	for tileId: int in rawTileDict:
+		var tile: Dictionary = rawTileDict[tileId]
+		for focusTileId: int in rawTileDict:
+			var focusTile: Dictionary = rawTileDict[focusTileId]
+			link_tiles(tile, focusTile)
+	
+
+func get_picture(tileArray: Array) -> String:
+	return ""
+
 func solve2(input: String) -> Variant:
 	var solution: int = 1
 	
 	var rawTileDict: Dictionary = parse_raw_tile_string(input)
 	
-	for tileId: int in rawTileDict:
-		var tile: Dictionary = rawTileDict[tileId]
-		for focusTileId: int in rawTileDict:
-			var focusTile: Dictionary = rawTileDict[focusTileId]
-			
-			var isShared: bool = false
-			for shareEdge: Array in tile["sharedEdgeTiles"]:
-				if isShared: continue
-				if shareEdge[0] == focusTileId:
-					isShared = true
-			
-			if tile != focusTile and not isShared:
-				for tileEdgeInd: int in tile["edgeData"].size():
-					var tileEdge: String = tile["edgeData"][tileEdgeInd]
-					for focusTileEdgeInd: int in focusTile["edgeData"].size():
-						var focusTileEdge: String = focusTile["edgeData"][focusTileEdgeInd]
-						if tileEdge == focusTileEdge or tileEdge == focusTileEdge.reverse():
-							#print(str(tileId) + "/" + str(focusTileId))
-							#print(tileEdge)
-							tile["sharedEdgeTiles"].append([focusTileId, tileEdge, tileEdgeInd])
-							focusTile["sharedEdgeTiles"].append([tileId, focusTileEdge, focusTileEdgeInd])
-							
+	link_tiles_in_tile_dict(rawTileDict)
+	
 	var tileGrid: Array = make_grid_from_tile_dict(rawTileDict)
 	
-	#for rowInd: int in tileGrid.size():
-		#for tile: Dictionary in tileGrid[rowInd]:
-			#print(tile["tileId"])
-			#Helper.print_grid(tile["rawImage"])
-			#print()
-	
 	orient_tiles_in_grid(tileGrid)
+	
+	var compactBorderlessArray: String = get_picture(tileGrid)
 	
 	var length: int = get_tile_dict_width(rawTileDict)
 	
@@ -364,19 +363,5 @@ func solve2(input: String) -> Variant:
 				rowStr += tile["rawImage"][tileRow] + " "
 			print(rowStr)
 		print()
-	
-	#print("______________________")
-	
-	
-	#var quickPrintArray: Array = []
-	#
-	#for rowInd: int in tileGrid.size():
-		#quickPrintArray.append([])
-		#for element in tileGrid[rowInd]:
-			#if element == null: quickPrintArray.back().append(null)
-			#else: quickPrintArray.back().append(element["tileId"])
-		#
-	#for row in quickPrintArray:
-		#print(row)
 	
 	return solution
