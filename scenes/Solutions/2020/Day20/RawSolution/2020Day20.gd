@@ -399,7 +399,9 @@ func first_row_cleanup(tileGrid: Array) -> void:
 		var tile: Dictionary = tileGrid[0][tileInd]
 		var focusTile: Dictionary = tileGrid[1][tileInd]
 		if tile["rawImage"].back() != focusTile["rawImage"].front():
-			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 2)
+			# this broke a bit before so im just doing this the easy way
+			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
+			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
 
 func solve2(input: String) -> Variant:
 	
