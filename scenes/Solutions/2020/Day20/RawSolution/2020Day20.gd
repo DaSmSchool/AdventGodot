@@ -229,20 +229,20 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 	for rowInd: int in tileGrid.size():
 		for tileInd: int in tileGrid[rowInd].size():
 			var tile: Dictionary = tileGrid[rowInd][tileInd]
-			print(tile["tileId"])
-			for row: String in tile["rawImage"]:
-				print(row)
-			print("________________")
+			#print(tile["tileId"])
+			#for row: String in tile["rawImage"]:
+				#print(row)
+			#print("________________")
 			
-			if tile["tileId"] == 2311:
+			if tile["tileId"] == 2473:
 				pass
 			
 			var surroundingTileIds: Array = get_actual_surrounding_tile_ids(tileGrid, rowInd, tileInd)
 			var imageSurroundingTileIds: Array = get_tile_orientation_edge_order(tile)
 			
-			print(surroundingTileIds)
-			print(imageSurroundingTileIds)
-			print()
+			#print(surroundingTileIds)
+			#print(imageSurroundingTileIds)
+			#print()
 			
 			var rotated: bool = false
 			
@@ -254,14 +254,14 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 					firstTestElement = imageSurroundingTileIds[elementInd]
 					firstTestElementInd = elementInd
 			
-			var firstCompareInd: int = imageSurroundingTileIds.find(surroundingTileIds[firstTestElementInd])
+			var firstCompareInd: int = surroundingTileIds.find(imageSurroundingTileIds[firstTestElementInd])
 			
 			var firstElementDistance = firstTestElementInd - firstCompareInd
 			match firstElementDistance:
 				0:
 					pass
 				1, -3:
-					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, 1)
+					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, -1)
 					tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 1)
 					rotated = true
 				2, -2:
@@ -270,24 +270,30 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 					imageSurroundingTileIds[firstTestElementInd] = tempStore
 					tile["rawImage"].reverse()
 				3, -1:
-					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, -1)
+					imageSurroundingTileIds = Helper.shift_array(imageSurroundingTileIds, 1)
 					tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], -1)
 					rotated = true
 			
-			print(surroundingTileIds)
-			print(imageSurroundingTileIds)
-			print()
-			pass
+			#print(surroundingTileIds)
+			#print(imageSurroundingTileIds)
+			#print()
+			#pass
 			
 			var secondTestElementInd: int = -1
 			for elementInd in imageSurroundingTileIds.size():
 				if imageSurroundingTileIds[elementInd] != null and imageSurroundingTileIds[elementInd] != firstTestElement:
 					if imageSurroundingTileIds[elementInd] != surroundingTileIds[elementInd]:
 						secondTestElementInd = elementInd
+			
+			#print()
+			#print()
+			
+			#Helper.print_grid(tile["rawImage"])
+			
 			var secondCompareInd: int
 			# if no differing elements were found
 			if secondTestElementInd != -1:
-				secondCompareInd = imageSurroundingTileIds.find(surroundingTileIds[secondTestElementInd])
+				secondCompareInd = surroundingTileIds.find(imageSurroundingTileIds[secondTestElementInd])
 				
 				
 				if secondTestElementInd != secondCompareInd:
@@ -298,17 +304,19 @@ func orient_tiles_in_grid(tileGrid: Array) -> void:
 						tile["rawImage"].reverse()
 					else:
 						for rawImgRowInd: int in tile["rawImage"].size():
-							tile["rawImage"][rawImgRowInd].reverse()
+							tile["rawImage"][rawImgRowInd] = tile["rawImage"][rawImgRowInd].reverse()
 			
-			print(surroundingTileIds)
-			print(imageSurroundingTileIds)
-			print()
+			#Helper.print_grid(tile["rawImage"])
+			
+			#print(surroundingTileIds)
+			#print(imageSurroundingTileIds)
+			#print()
 			assert(surroundingTileIds == imageSurroundingTileIds, "not transformed properly")
 			pass
 			
-			for row: String in tile["rawImage"]:
-				print(row)
-			print("________________")
+			#for row: String in tile["rawImage"]:
+				#print(row)
+			#print("________________")
 func solve2(input: String) -> Variant:
 	var solution: int = 1
 	
@@ -345,6 +353,18 @@ func solve2(input: String) -> Variant:
 			#print()
 	
 	orient_tiles_in_grid(tileGrid)
+	
+	var length: int = get_tile_dict_width(rawTileDict)
+	
+	for row: Array in tileGrid:
+		var tileHeight: int = row[0]["rawImage"].size()
+		for tileRow: int in tileHeight:
+			var rowStr: String = ""
+			for tile: Dictionary in row:
+				rowStr += tile["rawImage"][tileRow] + " "
+			print(rowStr)
+		print()
+	
 	#print("______________________")
 	
 	
