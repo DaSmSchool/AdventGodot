@@ -394,6 +394,13 @@ func get_hash_count(picture: PackedStringArray) -> int:
 				hashCount += 1
 	return hashCount
 
+func first_row_cleanup(tileGrid: Array) -> void:
+	for tileInd: int in tileGrid.size():
+		var tile: Dictionary = tileGrid[0][tileInd]
+		var focusTile: Dictionary = tileGrid[1][tileInd]
+		if tile["rawImage"].back() != focusTile["rawImage"].front():
+			tile["rawImage"] = Helper.rotate_2d_string_array(tile["rawImage"], 2)
+
 func solve2(input: String) -> Variant:
 	
 	var rawTileDict: Dictionary = parse_raw_tile_string(input)
@@ -403,6 +410,8 @@ func solve2(input: String) -> Variant:
 	var tileGrid: Array = make_grid_from_tile_dict(rawTileDict)
 	
 	orient_tiles_in_grid(tileGrid)
+	
+	first_row_cleanup(tileGrid)
 	
 	var compactBorderlessArray: PackedStringArray = get_picture(tileGrid)
 	
