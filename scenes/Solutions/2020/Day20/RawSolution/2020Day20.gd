@@ -307,9 +307,6 @@ func fix_tile_orientation(tile: Dictionary, tileGrid: Array, rowInd: int, tileIn
 	assert(surroundingTileIds == imageSurroundingTileIds, "not transformed properly")
 	pass
 	
-	#for row: String in tile["rawImage"]:
-		#print(row)
-	#print("________________")
 
 func orient_tiles_in_grid(tileGrid: Array) -> void:
 	for rowInd: int in tileGrid.size():
