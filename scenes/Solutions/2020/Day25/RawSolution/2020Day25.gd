@@ -22,10 +22,3 @@ func solve1(input: String) -> int:
 		testRound %= 20201227
 	
 	return testRound
-
-func solve2(input: String) -> int:
-	var solution: int = 0
-	
-	
-	
-	return solution
