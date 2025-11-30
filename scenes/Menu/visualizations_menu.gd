@@ -7,7 +7,18 @@ func _ready() -> void:
 	var initMenu: VisualizationSubMenu = get_submenu(basePath)
 	print(initMenu.representPath)
 	$VizualizationMenus.add_child(initMenu)
-	
+
+func _process(delta: float) -> void:
+	if $VisualizationLoadingLabel.visible:
+		$VisualizationLoadingLabel.rotation_degrees += 5
+
+func show_visualization_loading() -> void:
+	$VisualizationLoadingLabel.show()
+	$VisualizationLoadingLabel.rotation_degrees = 0
+
+func hide_visualization_loading() -> void:
+	$VisualizationLoadingLabel.hide()
+
 func get_submenu(path: String) -> VisualizationSubMenu:
 	var initMenu: VisualizationSubMenu = Instantiate.scene(VisualizationSubMenu)
 	initMenu.representPath = path

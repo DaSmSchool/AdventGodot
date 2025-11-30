@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4te0fdn1q36l"]
+
+[ext_resource type="Script" uid="uid://b6e2krytfdsut" path="res://scenes/Solutions/2024/Day7/VisTry/canvas.gd" id="1_3riby"]
+[ext_resource type="Script" uid="uid://d2l4i8ad4agbu" path="res://scenes/Solutions/2024/Day7/VisTry/main.gd" id="1_pn0nm"]
+
+[node name="Day7" type="Node"]
+script = ExtResource("1_pn0nm")
+
+[node name="Canvas" type="Node2D" parent="."]
+script = ExtResource("1_3riby")

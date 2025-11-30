@@ -1,5 +1,6 @@
 extends Node2D
 
+
 var winSize: Vector2
 
 var pointSpots: Array[Vector2] = [

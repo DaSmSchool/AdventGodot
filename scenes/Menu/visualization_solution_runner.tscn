@@ -1,3 +1,9 @@
-[gd_scene format=3 uid="uid://b73tgawlmt6eb"]
+[gd_scene load_steps=2 format=3 uid="uid://b73tgawlmt6eb"]
 
-[node name="VisualizationSolutionRunner" type="Node"]
+[ext_resource type="Script" uid="uid://pg6ccnbsfctt" path="res://scenes/Menu/visualization_solution_runner.gd" id="1_5ngdy"]
+
+[node name="VisualizationSolutionRunner" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 1
+script = ExtResource("1_5ngdy")

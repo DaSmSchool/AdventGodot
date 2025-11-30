@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cyyhmqgs0sqqe"]
+[gd_scene load_steps=3 format=3 uid="uid://cyyhmqgs0sqqe"]
 
 [ext_resource type="Script" uid="uid://dt1j87ynr0j8r" path="res://scenes/Menu/visualizations_menu.gd" id="1_5uhtg"]
+
+[sub_resource type="Theme" id="Theme_y4yw4"]
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/font_sizes/font_size = 36
 
 [node name="VisualizationsMenu" type="Control"]
 layout_mode = 3
@@ -27,3 +31,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VisualizationLoadingLabel" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_top = 83.5
+offset_right = 167.0
+offset_bottom = 133.5
+pivot_offset = Vector2(83.5, 25)
+theme = SubResource("Theme_y4yw4")
+text = "Loading..."

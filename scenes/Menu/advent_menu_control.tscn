@@ -9,8 +9,12 @@
 script = ExtResource("1_d31q1")
 
 [node name="RawSolutionRunner" parent="." instance=ExtResource("3_duyc1")]
+visible = false
 
 [node name="VisualizationsMenu" parent="." instance=ExtResource("2_duyc1")]
 mouse_filter = 1
 
 [node name="VisualizationSolutionRunner" parent="." instance=ExtResource("4_f301d")]
+visible = false
+
+[connection signal="visualization_exited" from="VisualizationSolutionRunner" to="." method="_on_visualization_solution_runner_visualization_exited"]

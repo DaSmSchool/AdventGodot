@@ -36,7 +36,7 @@ func is_solution_raw() -> String:
 
 func is_solution_visualization() -> String:
 	var dir: DirAccess = DirAccess.open(representPath)
-	if dir.get_files().has("Solution.tscn"): return representPath + "Solution.tscn"
+	if dir.get_files().has("main.tscn"): return representPath + "main.tscn"
 	return ""
 
 func _on_visualization_pressed() -> void:
@@ -45,11 +45,14 @@ func _on_visualization_pressed() -> void:
 		head_into_path.emit(representPath)
 	else:
 		var rawSol: String = is_solution_raw()
+		var visSol: String = is_solution_visualization()
 		if rawSol != "":
 			var rootNode: Node = get_tree().current_scene
 			assert(rootNode is AdventMenuControl, "Root node isn't AdventMenuControl")
 			(rootNode as AdventMenuControl).run_raw_advent_solution(rawSol)
-		elif is_solution_visualization() != "":
-			pass
+		elif visSol != "":
+			var rootNode: Node = get_tree().current_scene
+			assert(rootNode is AdventMenuControl, "Root node isn't AdventMenuControl")
+			(rootNode as AdventMenuControl).run_advent_visualization(visSol)
 		else:
 			pass

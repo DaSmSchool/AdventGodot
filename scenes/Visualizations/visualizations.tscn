@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://br7fc3ru3lbi2"]
 
-[ext_resource type="PackedScene" uid="uid://c4te0fdn1q36l" path="res://scenes/Visualizations/2024/Day7/day_7.tscn" id="1_c7te1"]
+[ext_resource type="PackedScene" uid="uid://c4te0fdn1q36l" path="res://scenes/Solutions/2024/Day7/VisTry/main.tscn" id="1_c7te1"]
 
 [node name="Visualizations" type="Node"]
 

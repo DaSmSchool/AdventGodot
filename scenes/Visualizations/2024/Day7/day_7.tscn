@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4te0fdn1q36l"]
-
-[ext_resource type="Script" uid="uid://b6e2krytfdsut" path="res://scenes/Visualizations/2024/Day7/canvas.gd" id="1_3riby"]
-
-[node name="Day7" type="Node"]
-
-[node name="Canvas" type="Node2D" parent="."]
-script = ExtResource("1_3riby")
