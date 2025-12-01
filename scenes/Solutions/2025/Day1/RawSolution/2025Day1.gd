@@ -51,7 +51,7 @@ func progress_dial_p2(dialNumber: int, inputLine: String) -> Array:
 	if sign(adjustedDial) == -1:
 		adjustedDial += 100
 	
-	print_log(str(adjustedDial) + " : " + str(adjustedDial))
+	print_log(str(timesClicked) + " : " + str(adjustedDial))
 	
 	return [adjustedDial, timesClicked]
 	
