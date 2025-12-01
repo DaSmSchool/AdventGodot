@@ -1,6 +1,8 @@
 extends Control
 class_name RawSolutionPartSolver
 
+@onready var logLabel: RichTextLabel = $VBoxContainer/ScrollContainer/LogMessages
+
 var solvingThread: Thread
 
 var solutionMutex: Mutex
@@ -25,11 +27,18 @@ func _process(delta: float) -> void:
 		currentMicroTime = Time.get_ticks_msec()
 		millisecondsTaken = currentMicroTime - startingMicroTime
 	set_time_text(millisecondsTaken)
-	
+
+func add_logs(messages: PackedStringArray) -> void:
+	var totalLog: String = ""
+	for message: String in messages:
+		totalLog += message + "\n"
+	logLabel.text += totalLog
 
 func solve_given_solution(scriptPath: String, part: int, adventInput: String) -> void:
 	var solutionResource: Resource = load(scriptPath)
 	var solutionScript: Solution = solutionResource.new()
+	add_child(solutionScript)
+	solutionScript.log_messages.connect(add_logs)
 	var solutionMethod: Callable = Callable(solutionScript, "solve" + str(part))
 	startingMicroTime = Time.get_ticks_msec()
 	timeChanging = true
