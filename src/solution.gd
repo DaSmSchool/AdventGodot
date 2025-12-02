@@ -16,9 +16,9 @@ func flush_logs(logs: PackedStringArray) -> void:
 func _process(delta: float) -> void:
 	flush_logs(logQueue)
 
-func print_log(message: String) -> void:
+func print_log(message: Variant) -> void:
 	logMutex.lock()
-	logQueue.append(message)
+	logQueue.append(str(message))
 	logMutex.unlock()
 
 func solve1(input: String) -> Variant:
