@@ -28,6 +28,7 @@ func find_silly_ids_p2(idStart: int, idEnd: int) -> Array:
 				for focusInd: int in range(lengthSegment, idLength, lengthSegment):
 					if idStr.substr(focusInd, lengthSegment).left(lengthSegment) != comparisonRepeat:
 						validSegment = false
+						break
 			else:
 				validSegment = false
 			if validSegment:
