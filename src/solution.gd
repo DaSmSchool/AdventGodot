@@ -6,12 +6,16 @@ signal log_messages(messages: PackedStringArray)
 var logQueue: PackedStringArray = []
 var logMutex: Mutex = Mutex.new()
 
-
-func flush_logs(logs: PackedStringArray) -> void:
+func transfer_logs() -> PackedStringArray:
 	logMutex.lock()
-	log_messages.emit(logQueue.duplicate())
+	var newLog: PackedStringArray = logQueue.duplicate()
 	logQueue = []
 	logMutex.unlock()
+	return newLog
+
+func flush_logs(logs: PackedStringArray) -> void:
+	log_messages.emit(transfer_logs())
+	
 
 func _process(delta: float) -> void:
 	flush_logs(logQueue)
