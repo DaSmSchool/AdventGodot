@@ -13,12 +13,12 @@ func transfer_logs() -> PackedStringArray:
 	logMutex.unlock()
 	return newLog
 
-func flush_logs(logs: PackedStringArray) -> void:
+func flush_logs() -> void:
 	log_messages.emit(transfer_logs())
 	
 
 func _process(delta: float) -> void:
-	flush_logs(logQueue)
+	flush_logs()
 
 func print_log(message: Variant) -> void:
 	logMutex.lock()
