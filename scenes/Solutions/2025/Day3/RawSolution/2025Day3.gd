@@ -21,11 +21,11 @@ func find_biggest_voltage_p2(bank: Array, digits: int) -> int:
 	var bankSlice: Array = bank.duplicate()
 	for digitInd: int in range(digits):
 		bankSlice = bank.slice(currentChosenNumberInd, bank.size()-(digits-(digitInd+1)))
-		#print_log(bankSlice)
+		print_log(bankSlice)
 		var foundDigit: int = bankSlice.max()
 		currentChosenNumberInd += bankSlice.find(foundDigit)+1
 		batteryAssemble += str(foundDigit)
-	#print_log(batteryAssemble)
+	print_log(batteryAssemble)
 	return batteryAssemble.to_int()
 
 func solve1(input: String) -> Variant:
