@@ -27,7 +27,12 @@ func is_game_valid(game: Dictionary) -> bool:
 		if game[color].max() > colorLimit[color]:
 			return false
 	return true
-	
+
+func get_factor(game: Dictionary) -> int:
+	var factor: int = 1
+	for color: String in colorLimit:
+		factor *= game[color].max()
+	return factor
 
 func solve1(input: String) -> Variant:
 	var solution: int = 0
@@ -37,12 +42,13 @@ func solve1(input: String) -> Variant:
 		if is_game_valid(gamesList[gameInd]):
 			solution += gameInd+1
 	
-	
 	return solution
 
 func solve2(input: String) -> Variant:
 	var solution: int = 0
 	
-	
+	var gamesList: Array[Dictionary] = parse_games(input)
+	for gameInd: int in gamesList.size():
+		solution += get_factor(gamesList[gameInd])
 	
 	return solution
