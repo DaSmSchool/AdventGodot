@@ -1,0 +1,22 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://dk23qi04fm76i"]
+
+[ext_resource type="FontFile" uid="uid://504ueuw01nws" path="res://assets/fonts/Source Code Pro/static/SourceCodePro-Regular.ttf" id="1_jtwhx"]
+
+[sub_resource type="FontVariation" id="FontVariation_7htm1"]
+base_font = ExtResource("1_jtwhx")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jtwhx"]
+bg_color = Color(0.0627451, 0.0627451, 0.101960786, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.4, 0.4, 1)
+
+[resource]
+Button/fonts/font = ExtResource("1_jtwhx")
+Label/fonts/font = SubResource("FontVariation_7htm1")
+LineEdit/constants/outline_size = 2
+LineEdit/fonts/font = ExtResource("1_jtwhx")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_jtwhx")
+VBoxContainer/constants/separation = 11

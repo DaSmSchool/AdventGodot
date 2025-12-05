@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqyylcfjphtit"]
+
+[ext_resource type="Script" uid="uid://xwdoem3uxu76" path="res://addons/aoc_helper/plugin_scene.gd" id="1_87sjd"]
+[ext_resource type="Theme" uid="uid://dk23qi04fm76i" path="res://themes/aoc_theme.tres" id="2_bqg2e"]
+
+[node name="PluginScene" type="Control" node_paths=PackedStringArray("yearEdit", "dayEdit")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -659.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_bqg2e")
+script = ExtResource("1_87sjd")
+yearEdit = NodePath("VBoxContainer/YearChoice/YearEdit")
+dayEdit = NodePath("VBoxContainer/DayChoice/DayEdit")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05882353, 0.05882353, 0.13725491, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Quick Raw Solution Directory Maker"
+horizontal_alignment = 1
+
+[node name="YearChoice" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_bqg2e")
+
+[node name="YearLabel" type="Label" parent="VBoxContainer/YearChoice"]
+layout_mode = 2
+theme = ExtResource("2_bqg2e")
+theme_override_font_sizes/font_size = 25
+text = "Year: "
+
+[node name="YearEdit" type="LineEdit" parent="VBoxContainer/YearChoice"]
+layout_mode = 2
+theme = ExtResource("2_bqg2e")
+text = "2020"
+
+[node name="DayChoice" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_bqg2e")
+
+[node name="DayLabel" type="Label" parent="VBoxContainer/DayChoice"]
+layout_mode = 2
+theme = ExtResource("2_bqg2e")
+theme_override_font_sizes/font_size = 25
+text = "Day: "
+
+[node name="DayEdit" type="LineEdit" parent="VBoxContainer/DayChoice"]
+layout_mode = 2
+theme = ExtResource("2_bqg2e")
+text = "1"
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "Make directories and files!!!"
+
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_create_button_pressed"]

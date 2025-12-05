@@ -30,6 +30,10 @@ gdscript/warnings/static_called_on_instance=0
 window/size/viewport_width=1280
 window/size/viewport_height=720
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/aoc_helper/plugin.cfg")
+
 [gui]
 
 timers/tooltip_delay_sec=0.21
