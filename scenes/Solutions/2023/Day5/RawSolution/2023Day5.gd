@@ -3,6 +3,14 @@ extends Solution
 func parse_seeds(rawSeeds: String) -> Array:
 	return Array(rawSeeds.substr(7).split(" ", false)).map(func(s): return int(s))
 
+func parse_seeds_p2(rawSeeds: String) -> Array:
+	var baseArray: Array = Array(rawSeeds.substr(7).split(" ", false)).map(func(s): return int(s))
+	var rangeArray: Array = []
+	for i: int in range(0, baseArray.size(), 2):
+		rangeArray.append([baseArray[i], baseArray[i+1]])
+	return rangeArray
+
+
 func add_to_almanac(rawConvert: String, iti: Dictionary[String, String], conversions: Dictionary[String, Array]) -> void:
 	var convertSplit: PackedStringArray = rawConvert.split("\n", false)
 	var nameShortenedString: String = convertSplit[0].substr(0, convertSplit[0].length()-5)
@@ -55,7 +63,7 @@ func solve2(input: String) -> Variant:
 	var solution: int = 0
 	
 	var inputSplit: PackedStringArray = input.split("\n\n", false)
-	var baseSeeds: Array = parse_seeds(inputSplit[0])
+	var baseSeeds: Array = parse_seeds_p2(inputSplit[0])
 	print(baseSeeds)
 	
 	var itemToItem: Dictionary[String, String] = {}
@@ -64,10 +72,17 @@ func solve2(input: String) -> Variant:
 	for rawConvert: String in rawConversions:
 		add_to_almanac(rawConvert, itemToItem, itemConversions)
 	
-	var associatedLocations: Array = []
-	for seed: int in baseSeeds:
-		associatedLocations.append(find_associated_land(seed, itemToItem, itemConversions))
+	var itemToItemReverse: Dictionary[String, String] = {}
+	for item: String in itemToItem:
+		itemToItemReverse[itemToItem[item]] = item
+	
+	for conversionItem: String in itemConversions:
+		var conversionArray: Array = itemConversions[conversionItem]
+		conversionArray.sort_custom(func(a, b): return a[0] < b[0])
 	
 	
 	
-	return associatedLocations.min()
+	for type: String in itemConversions:
+		print_log(str(type) + " : " + str(itemConversions[type]))
+	
+	return solution
