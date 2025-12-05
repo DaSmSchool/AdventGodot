@@ -27,7 +27,7 @@ func play_card(cardNumber: int, cards: Array, cardHistory: Array) -> int:
 	var card: Array = cards[cardNumber]
 	var numbersWon: int = Helper.shared_elements(card[0], card[1]).size()
 	var cardsPlayed: int = 1
-	print_log(str(cardNumber) + " : " + str(numbersWon))
+	#print_log(str(cardNumber) + " : " + str(numbersWon))
 	for i: int in range(numbersWon):
 		cardsPlayed += play_card(cardNumber+i+1, cards, cardHistory)
 	cardHistory[cardNumber] = cardsPlayed
@@ -42,5 +42,5 @@ func solve2(input: String) -> Variant:
 	cardsPlayedHistory.fill(-1)
 	for cardInd: int in cards.size():
 		solution += play_card(cardInd, cards, cardsPlayedHistory)
-	print_log(cardsPlayedHistory)
+	#print_log(cardsPlayedHistory)
 	return solution
