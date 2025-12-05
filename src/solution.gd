@@ -20,7 +20,7 @@ func flush_logs() -> void:
 func _process(delta: float) -> void:
 	flush_logs()
 
-func print_log(message: Variant) -> void:
+func print_log(message: Variant = "") -> void:
 	logMutex.lock()
 	logQueue.append(str(message))
 	logMutex.unlock()
