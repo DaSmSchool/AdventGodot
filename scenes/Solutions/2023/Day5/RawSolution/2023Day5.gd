@@ -54,4 +54,20 @@ func solve1(input: String) -> Variant:
 func solve2(input: String) -> Variant:
 	var solution: int = 0
 	
-	return solution
+	var inputSplit: PackedStringArray = input.split("\n\n", false)
+	var baseSeeds: Array = parse_seeds(inputSplit[0])
+	print(baseSeeds)
+	
+	var itemToItem: Dictionary[String, String] = {}
+	var itemConversions: Dictionary[String, Array] = {}
+	var rawConversions: PackedStringArray = inputSplit.slice(1)
+	for rawConvert: String in rawConversions:
+		add_to_almanac(rawConvert, itemToItem, itemConversions)
+	
+	var associatedLocations: Array = []
+	for seed: int in baseSeeds:
+		associatedLocations.append(find_associated_land(seed, itemToItem, itemConversions))
+	
+	
+	
+	return associatedLocations.min()
