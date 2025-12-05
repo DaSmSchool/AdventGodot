@@ -87,3 +87,10 @@ static func rotate_2d_string_array(arr: Array, n: int) -> Array:
 				newArr[width-1-j][i] = arr[i][j]
 			
 	return newArr
+
+static func shared_elements(array1: Array, array2: Array) -> Array:
+	var assembleArray: Array = []
+	for element: Variant in array1:
+		if element in array2:
+			assembleArray.append(element)
+	return assembleArray
