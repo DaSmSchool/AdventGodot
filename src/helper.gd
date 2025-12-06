@@ -94,3 +94,28 @@ static func shared_elements(array1: Array, array2: Array) -> Array:
 		if element in array2:
 			assembleArray.append(element)
 	return assembleArray
+
+static func is_prime(number: int) -> bool:
+	if number <= 1:
+		return false
+	if number <= 3:
+		return true
+	if number % 2 == 0 or number % 3 == 0:
+		return false
+	var i = 5
+	while i * i <= number:
+		if number % i == 0 or number % (i+2) == 0:
+			return false
+		i += 6
+	return true
+
+static func get_positive_factors(number: int) -> Array:
+	var factors: Array = []
+	if number < 1:
+		return []
+	for i: int in range(1, sqrt(number)):
+		if number/float(i) == number/i:
+			factors.append(i)
+			factors.append(number/i)
+	factors.sort()
+	return factors
