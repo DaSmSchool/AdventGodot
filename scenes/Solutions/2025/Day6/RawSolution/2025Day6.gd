@@ -8,8 +8,8 @@ func solve1(input: String) -> Variant:
 	for rawLine: String in rawSplit:
 		equationArray.append(rawLine.split(" ", false))
 	
-	for equationLine: Array in equationArray:
-		print_log(equationLine)
+	#for equationLine: Array in equationArray:
+		#print_log(equationLine)
 	
 	for equationInd: int in equationArray[0].size():
 		var equationValue: int = 0
@@ -50,7 +50,7 @@ func get_equations_p2(input: PackedStringArray) -> Array:
 	
 	return equationArray
 
-func evaluate_equation(equation: Array) -> int:
+func evaluate_equation_p2(equation: Array) -> int:
 	var equationValue: int = 0
 	var equationMode: String = equation.back().split(" ", false)[0]
 	if equationMode == "*":
@@ -74,12 +74,12 @@ func solve2(input: String) -> Variant:
 	var rawSplit: PackedStringArray = input.split("\n", false)
 	equationArray = get_equations_p2(rawSplit)
 	
-	for equation: Array in equationArray:
-		for equationLine: String in equation:
-			print_log(equationLine)
-		print_log()
+	#for equation: Array in equationArray:
+		#for equationLine: String in equation:
+			#print_log(equationLine)
+		#print_log()
 	
 	for equation: Array in equationArray:
-		solution += evaluate_equation(equation)
+		solution += evaluate_equation_p2(equation)
 	
 	return solution
