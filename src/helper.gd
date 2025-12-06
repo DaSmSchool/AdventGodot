@@ -24,6 +24,9 @@ static func get_timezonedb_key() -> String:
 static func valid_pos_at_grid(yInd: int, xInd: int, grid: Array) -> bool:
 	return 0 <= yInd and yInd < grid.size() and 0 <= xInd and xInd < grid[0].size()
 
+static func valid_pos_at_packed_string_array(yInd: int, xInd: int, grid: PackedStringArray) -> bool:
+	return 0 <= yInd and yInd < grid.size() and 0 <= xInd and xInd < grid[0].length()
+
 static func print_grid(grid: Array):
 	for line in grid:
 		var lineAssemble: String = ""
