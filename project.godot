@@ -48,6 +48,10 @@ exit_visualization={
 ]
 }
 
+[network]
+
+limits/debugger/max_chars_per_second=1000000
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
