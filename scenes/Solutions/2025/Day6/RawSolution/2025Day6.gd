@@ -22,7 +22,6 @@ func solve1(input: String) -> Variant:
 			elif equationMode == "*":
 				equationValue *= equationArray[equationLineInd][equationInd].to_int()
 		solution += equationValue
-			
 	
 	return solution
 
@@ -82,18 +81,5 @@ func solve2(input: String) -> Variant:
 	
 	for equation: Array in equationArray:
 		solution += evaluate_equation(equation)
-	
-	#for equationInd: int in equationArray[0].size():
-		#var equationValue: int = 0
-		#var equationMode: String = equationArray.back()[equationInd]
-		#if equationMode == "*":
-			#equationValue += 1
-		#for equationLineInd: int in equationArray.size()-1:
-			#if equationMode == "+":
-				#equationValue += equationArray[equationLineInd][equationInd].to_int()
-			#elif equationMode == "*":
-				#equationValue *= equationArray[equationLineInd][equationInd].to_int()
-		#solution += equationValue
-			#
 	
 	return solution
