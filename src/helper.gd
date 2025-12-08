@@ -122,3 +122,13 @@ static func get_positive_factors(number: int) -> Array:
 			factors.append(number/i)
 	factors.sort()
 	return factors
+
+static func get_flipped_dictionary(dict: Dictionary) -> Dictionary:
+	var flipped: Dictionary = {}
+	for key in dict:
+		flipped[dict[key]] = key
+	return flipped
+
+static func print_dict(dict: Dictionary) -> void:
+	for key in dict:
+		print(str(key) + " : " + str(dict[key]))
