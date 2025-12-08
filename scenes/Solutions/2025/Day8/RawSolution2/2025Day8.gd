@@ -32,9 +32,11 @@ func flip_connections(dict: Dictionary[Array, float]) -> Dictionary:
 
 func get_flip_connections(points: Array[Vector3i]) -> Dictionary:
     var possibleConnections: Dictionary[Array, float] = make_possible_connections(points)
-    #print(possibleConnections)
+    Helper.print_dict(possibleConnections)
+    print("############")
     var connectionsFlipped: Dictionary = flip_connections(possibleConnections)
     connectionsFlipped.sort()
+    
     return connectionsFlipped
 
 func solve1(input: String) -> Variant:
@@ -46,7 +48,7 @@ func solve1(input: String) -> Variant:
     
     var connectionsFlipped: Dictionary = get_flip_connections(singlePoints)
     
-    var circuits: Array[Array] = []
+    Helper.print_dict(connectionsFlipped)
     
     var pointGraph: Dictionary[Vector3i, Array] = {}
     
@@ -60,10 +62,16 @@ func solve1(input: String) -> Variant:
         if lengthInd % 100 == 0:
             print_log(lengthInd/float(keySize))
         for connections: Array in connectionsFlipped[length]:
-            pointGraph[connections[0]].append(connections[1])
-            pointGraph[connections[1]].append(connections[0])
-        
-        
+            if not connections[1] in pointGraph[connections[0]]:
+                pointGraph[connections[0]].append(connections[1])
+            if not connections[0] in pointGraph[connections[1]]:
+                pointGraph[connections[1]].append(connections[0])
+        #print(connectionsFlipped[length])
+        #Helper.print_dict(pointGraph)
+        pass
+    
+    Helper.print_dict(pointGraph)
+    
     #for circuit: Array in circuits:
         #print_log(str(circuit.size()) + " : " + str(circuit))
     

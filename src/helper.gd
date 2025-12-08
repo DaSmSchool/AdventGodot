@@ -128,3 +128,7 @@ static func get_flipped_dictionary(dict: Dictionary) -> Dictionary:
 	for key in dict:
 		flipped[dict[key]] = key
 	return flipped
+
+static func print_dict(dict: Dictionary) -> void:
+	for key in dict:
+		print(str(key) + " : " + str(dict[key]))

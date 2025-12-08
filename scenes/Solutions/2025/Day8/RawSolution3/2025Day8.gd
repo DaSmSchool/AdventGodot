@@ -14,7 +14,7 @@ func make_possible_connections(singlePoints: Array[Vector3i]) -> Dictionary[Arra
 		for vec2: Vector3i in singlePoints:
 			if vec1 == vec2: continue
 			if not possibleConnections.has([vec2, vec1]) and not possibleConnections.has([vec1, vec2]):
-				possibleConnections[[vec1, vec2]] = vec1.distance_to(vec2)
+				possibleConnections[[vec1, vec2]] = pow(vec1.x-vec2.x, 2) + pow(vec1.y-vec2.y, 2) + pow(vec1.z-vec2.z, 2)
 	return possibleConnections
 
 func solve1(input: String) -> Variant:
@@ -25,14 +25,14 @@ func solve1(input: String) -> Variant:
 	#print(singlePoints)
 	
 	var possibleConnections: Dictionary[Array, float] = make_possible_connections(singlePoints)
-	#print(possibleConnections)
+	#Helper.print_dict(possibleConnections)
 	var tempKeys: Array = possibleConnections.keys()
 	var tempValues: Array = possibleConnections.values()
 	var tempMax: int = tempValues.size()
 	var circuits: Array[Array] = []
 	
-	var isSample: bool = false
-	var maxIter: int = 11
+	var isSample: bool = true
+	var maxIter: int = 10
 	var currIter: int = 0
 	
 	while tempValues.size() != 0 and (not isSample or currIter < maxIter):
@@ -69,12 +69,12 @@ func solve1(input: String) -> Variant:
 			singlePoints.erase(nodeConnection[0])
 			singlePoints.erase(nodeConnection[1])
 			circuits.append(madeCircuit)
-		#print(str(nodeConnection) + " : " + str(hasP1) + ", " + str(hasP2) + " : " + str(valMin) + " : " + str(singlePoints.size()) + " : \n" + str(madeCircuit))
+		print(str(nodeConnection) + " : " + str(hasP1) + ", " + str(hasP2) + " : " + str(valMin) + " : " + str(singlePoints.size()) + " : \n" + str(madeCircuit))
 		tempValues.remove_at(valMinInd)
 		tempKeys.remove_at(valMinInd)
 		
-	#for circuit: Array in circuits:
-		#print_log(str(circuit.size()) + " : " + str(circuit))
+	for circuit: Array in circuits:
+		print_log(str(circuit.size()) + " : " + str(circuit))
 	
 	var circuitLens: Array = circuits.map(func(s): return s.size())
 	solution *= circuitLens.max()
