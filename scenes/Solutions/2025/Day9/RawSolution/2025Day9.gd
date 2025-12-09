@@ -87,9 +87,41 @@ func sorted_points(points: Array) -> Array:
 	sortPoints.sort_custom(sort_vec2i)
 	return sortPoints
 
+func get_quadrant_bounds(point: Vector2i, quadDir: Vector2i, pointXDict: Dictionary[int, Array], pointYDict: Dictionary[int, Array]) -> Array:
+	var validXRange: Array
+	var validYRange: Array
+	if quadDir.x == -1:
+		validXRange = [0, point.x]
+	elif quadDir.x == 1:
+		validXRange = [point.x, pointXDict.keys().max()]
+	else:
+		assert(false, "qdir invalid")
+	if quadDir.y == -1:
+		validYRange = [0, point.y]
+	elif quadDir.y == 1:
+		validYRange = []
+	else:
+		assert(false, "qdir invalid")
+	return [validXRange, validYRange]
+
+func num_in_bounds(num: int, bounds: Array) -> bool:
+	return bounds[0] <= num and num <= bounds[1]
+
 func get_largest_area_from_point_towards_quadrant(point: Vector2i, quadDir: Vector2i, pointXDict: Dictionary[int, Array], pointYDict: Dictionary[int, Array]) -> int:
+	var manipXDict: Dictionary[int, Array] = pointXDict.duplicate(true)
+	var manipYDict: Dictionary[int, Array] = pointYDict.duplicate(true)
 	var maxArea: int = 0
+	var qBounds: Array = get_quadrant_bounds(point, quadDir, pointXDict, pointYDict)
+	for xKey: int in pointXDict:
+		if not num_in_bounds(xKey, qBounds[0]):
+			manipXDict.erase(xKey)
+		else:
+			for yKey: int in pointXDict[xKey]:
+				if not num_in_bounds(yKey, qBounds[1]):
+					manipXDict[xKey].erase(yKey)
 	
+	for xKeyInd: int in manipXDict.size():
+		pass
 	
 	return maxArea
 
