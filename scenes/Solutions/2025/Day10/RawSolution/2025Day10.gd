@@ -19,14 +19,43 @@ func solve1(input: String) -> Variant:
 	var joltageArray: Array = []
 	parse_input(input, lightArray, buttonArray, joltageArray)
 	
-	#for setInd: int in lightArray.size():
+	var shortestButtonPossibilities: Array = []
+	shortestButtonPossibilities.resize(lightArray.size())
+	
+	for setInd: int in lightArray.size():
+		var validButtonCombos: Array[String] = []
+		var lightSet: Array = []
+		lightSet.resize(lightArray[setInd].size())
+		
+		var combinationAmount: int = pow(2, buttonArray[setInd].size())
+		for i: int in combinationAmount:
+			# set to no lights
+			lightSet = lightSet.map(func(_s): return false)
+			
+			var strRepresentation: String = String.num_int64(i, 2).reverse()
+			for buttonInd: int in strRepresentation.length():
+				if strRepresentation[buttonInd] == "0": continue
+				var focusButton: Array = buttonArray[setInd][buttonInd]
+				for lightInvertIndex: int in focusButton:
+					lightSet[lightInvertIndex] = not lightSet[lightInvertIndex]
+			if lightSet == lightArray[setInd]:
+				validButtonCombos.append(strRepresentation)
+			#print(strRepresentation)
+			#print(lightSet)
+			#print(lightArray[setInd])
+			#print()
+		#print(validButtonCombos)
+		shortestButtonPossibilities[setInd] = validButtonCombos.map(func(s): return s.count("1")).min()
 		#print(lightArray[setInd])
 		#print(buttonArray[setInd])
 		#print(joltageArray[setInd])
 		#print()
 	
-	print(buttonArray.map(func(s): return pow(2, s.size())).max())
-	
+	#print(shortestButtonPossibilities)
+	for lowest: int in shortestButtonPossibilities:
+		solution += lowest
+	#print(buttonArray.map(func(s): return pow(2, s.size())).max())
+	#
 	
 	return solution
 
