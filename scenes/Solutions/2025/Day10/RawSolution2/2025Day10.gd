@@ -47,37 +47,48 @@ func solve1(input: String) -> Variant:
 		solution += lowest
 	#print(buttonArray.map(func(s): return pow(2, s.size())).max())
 	#
-	
 	return solution
 
-func get_least_button_presses(buttonArray: Array, targetJoltageArray: Array, testingJoltageArray: Array, buttonPresses: int, pressesToBeat: int, buttonsPressed: Array, buttonsPressedDict: Dictionary) -> int:
-	if buttonPresses >= pressesToBeat: return 1_000_000_000
-	var possibleButtonPresses: Array = []
-	for buttonInd: int in buttonArray.size():
-		buttonsPressed[buttonInd] += 1
-		if buttonsPressedDict.has(buttonsPressed):
-			possibleButtonPresses.append(buttonsPressedDict[buttonsPressed])
-			continue
-		var newTestingArray: Array = testingJoltageArray.duplicate()
-		for joltageInd: int in buttonArray[buttonInd]:
-			newTestingArray[joltageInd]+=1
-		var viableButton: bool = true
-		if testingJoltageArray == newTestingArray:
-			buttonsPressedDict[buttonsPressed] = buttonPresses
-			return buttonPresses
-		for testJoltInd: int in newTestingArray.size():
-			if newTestingArray[testJoltInd] > targetJoltageArray[testJoltInd]:
-				viableButton = false
-				break
-		if viableButton:
-			if not possibleButtonPresses.is_empty():
-				pressesToBeat = possibleButtonPresses.min()
-			possibleButtonPresses.append(get_least_button_presses(buttonArray, targetJoltageArray, newTestingArray, buttonPresses+1, pressesToBeat, buttonsPressed.duplicate(), buttonsPressedDict))
-		else:
-			possibleButtonPresses.append(1_000_000_000)
-		buttonsPressedDict[buttonsPressed] = possibleButtonPresses.back()
-	return possibleButtonPresses.min()
+func get_joltage_difference(joltageArray: Array, buildUpJoltageArray: Array) -> Array:
+	var diffArray: Array = []
+	for jInd: int in joltageArray.size():
+		diffArray.append(joltageArray[jInd]-buildUpJoltageArray[jInd])
+	return diffArray
 
+func get_button_scores(buttonArray: Array, remainingJoltageDifference: Array) -> Array:
+	var buttonScores: Array = []
+	for buttonInd: int in buttonArray.size():
+		var button: Array = buttonArray[buttonInd]
+		var buttonPressed: int = 0
+		var testDiffArray: Array = remainingJoltageDifference.duplicate()
+		while true:
+			var pressingDone: bool = false
+			for joltInd: int in button:
+				testDiffArray[joltInd]-=1
+				
+				if testDiffArray[joltInd] < 0:
+					pressingDone = true
+					break
+			if not pressingDone:
+				buttonPressed += 1
+			else:
+				buttonScores.append(buttonPressed*button.size())
+				break
+	return buttonScores
+
+func get_lowest_joltage_presses(buttonArray: Array, joltageArray: Array) -> int:
+	var buttonPresses: int = 0
+	var buildUpJoltageArray: Array = joltageArray.map(func(_j): return 0)
+	while buildUpJoltageArray != joltageArray:
+		var remainingJoltageDifference: Array = get_joltage_difference(joltageArray, buildUpJoltageArray)
+		var buttonScores: Array = get_button_scores(buttonArray, remainingJoltageDifference)
+		var maxScore: int = buttonScores.max()
+		var maxInd: int = buttonScores.find(maxScore)
+		for joltInd: int in buttonArray[maxInd]:
+			buildUpJoltageArray[joltInd]+=1
+			buttonPresses+=1
+	return buttonPresses
+		
 func solve2(input: String) -> Variant:
 	var solution: int = 0
 	
@@ -90,11 +101,6 @@ func solve2(input: String) -> Variant:
 	shortestButtonPossibilities.resize(lightArray.size())
 	
 	for setInd: int in lightArray.size():
-		var buttonsPressedDict: Dictionary = {}
-		var testingJoltageArray: Array = joltageArray[setInd].map(func(_s): return 0)
-		var testingButtonsPressed: Array = buttonArray[setInd].map(func(_s): return 0)
-		var setResult: int = get_least_button_presses(buttonArray[setInd], joltageArray[setInd], testingJoltageArray, 1, 1_000_000, testingButtonsPressed.duplicate(), buttonsPressedDict)
-		solution += setResult
-		shortestButtonPossibilities[setInd] = setResult
+		get_lowest_joltage_presses(buttonArray[setInd], joltageArray[setInd])
 	
 	return solution
