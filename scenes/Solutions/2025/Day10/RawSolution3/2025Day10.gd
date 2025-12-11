@@ -40,6 +40,7 @@ func solve2(input: String) -> Variant:
 	OS.execute("python", ["-c", 'import sys; sys.path.append(\'F:/godot/projects/AdventGodot/scenes/Solutions/2025/Day10/RawSolution3/\'); from z3solve import *; print(let_z3_do_the_work(\'%s\'))' % JSON.stringify(jDict).c_escape()], output, true)
 
 	print(output)
-	#print(output[0].substr(0, output[0].length()-4))
+	solution = output[0].substr(0, output[0].length()-2).to_int()
+	print(solution)
 	
 	return solution

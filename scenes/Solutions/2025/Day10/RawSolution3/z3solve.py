@@ -7,7 +7,7 @@ import json
 # this is also a case where solving a very specific kind of problem with the tools built for that problem is more suited than making something you can screw up on your own. Though, that can be said about a ton of other advent questions. Oh well. I played around with my own (unsuccessful) attempts, and this was just a lot more reliable than throwing myself at a wall.
 
 def let_z3_do_the_work(json_data):
-    print(z3)
+    #print(z3)
     data = json.loads(json_data)
     
     
