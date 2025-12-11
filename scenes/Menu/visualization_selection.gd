@@ -29,9 +29,17 @@ func set_path(path: String) -> void:
 func is_solution_raw() -> String:
 	var dir: DirAccess = DirAccess.open(representPath)
 	var dirFiles: PackedStringArray = dir.get_files()
-	# the size includes the uid of the script file
-	if dir.get_directories().is_empty() and dirFiles.size() == 2:
-		if dirFiles[0].ends_with(".gd"): return representPath + dirFiles[0]
+	var gdInd: int = -1
+	for fileInd: int in dirFiles.size():
+		if dirFiles[fileInd].ends_with(".gd"):
+			if gdInd != -1:
+				gdInd = -1
+				break
+			gdInd = fileInd
+			
+	if gdInd != -1:
+		return representPath + dirFiles[gdInd]
+	
 	return ""
 
 func is_solution_visualization() -> String:
