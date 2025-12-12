@@ -36,10 +36,12 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 text = "Quick Raw Solution Directory Maker"
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="YearChoice" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -72,9 +74,11 @@ theme = ExtResource("2_bqg2e")
 text = "1"
 
 [node name="Button" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 22
 text = "Make directories and files!!!"
+autowrap_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_create_button_pressed"]
